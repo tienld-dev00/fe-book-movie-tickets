@@ -6,7 +6,7 @@
         </div>
         <ul id="menuListProfile"
             class="z-10 hidden md:block absolute top-full left-0 w-full bg-colors_header-menu-75 border border-colers_text-600">
-            <a href="/profile" class="block p-4 text-start text-lg text-black hover:bg-blue-800">ACCOUNT INFORMATION</a>
+            <a href="/profile/1" class="block p-4 text-start text-lg text-black hover:bg-blue-800">ACCOUNT INFORMATION</a>
             <a href="/password-change" class="block p-4 text-start text-lg text-black hover:bg-blue-800">CHANGE
                 PASSWORD</a>
             <a href="/transaction-history" class="block p-4 text-start text-lg text-black hover:bg-blue-800">TRANSACTION HISTORY</a>

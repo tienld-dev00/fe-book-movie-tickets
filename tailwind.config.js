@@ -28,9 +28,18 @@ export default {
             75: '#f1eee9'
           }
         },
+        colors_footer: {
+          menu: {
+            25: '#0f1d2f',
+            50: '#031327'
+          }
+        },
         colers_text: {
           600: '#ff5400',
-          700: '#7e8eaa'
+        },
+        colers_button: {
+          25: '#030712',
+          50: '#2563EB'
         },
         current: 'currentcolor',
         'main-color': '#000000',

@@ -1,7 +1,7 @@
 <template>
     <div class="ml-3 mr-3">
         <div class="mt-7 mb-7 md:mt-10 md:mb-10">
-            <span class="text-2xl font-semibold">MOVIE IS SHOWING</span>
+            <span class="text-2xl font-bold">MOVIE IS SHOWING</span>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
             <!-- Card 1 -->
@@ -16,18 +16,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
 
@@ -43,18 +41,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
 
@@ -70,18 +66,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
 
@@ -97,18 +91,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
 
@@ -124,18 +116,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
 
@@ -151,18 +141,16 @@
                         </div>
                     </div>
                     <div class="p-4">
-                        <h2 class="text-xl font-bold truncate">PHIM ĐIỆN ẢNH DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU
-                            (
-                            LỒNG TIẾNG) (P)</h2>
-                        <p class="text-gray-700 mt-2"><strong>Thể loại:</strong> Hoạt Hình</p>
-                        <p class="text-gray-700"><strong>Thời lượng:</strong> 115 phút </p>
-                        <p class="text-gray-700"><strong>Đánh giá:</strong> P </p>
-                        <p class="text-gray-700"><strong>Khởi chiếu:</strong> 24-05-2024</p>
+                        <h2 class="text-xl font-bold truncate">MOVIE MOVIE DORAEMON - NOBITA AND THE EARTH SYMPHONY (VOICE OVER) (P)</h2>
+                        <p class="text-gray-700 mt-2"><strong>Category:</strong> Cartoon</p>
+                        <p class="text-gray-700"><strong>Time:</strong> 115 minutes </p>
+                        <p class="text-gray-700"><strong>Age limit:</strong> 12+ </p>
+                        <p class="text-gray-700"><strong>Premiere:</strong> May 24, 2024</p>
                     </div>
                 </router-link>
                 <div class="mt-2 mb-3 flex justify-center">
                     <button @click="outerVisible = true"
-                        class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">ĐẶT VÉ</button>
+                        class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">BOOK TICKETS</button>
                 </div>
             </div>
         </div>
@@ -221,7 +209,7 @@
             </div>
         </div>
         <router-link :to="{ name: 'booking' }" class="mt-2 mb-3 flex justify-center">
-            <button class="bg-gray-950 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <button class="bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">
                 ĐẶT VÉ
             </button>
         </router-link>
