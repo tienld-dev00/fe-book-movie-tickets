@@ -16,8 +16,12 @@
                 <a href="/upcoming-movie" class="text-xs md:text-sm lg:text-base text-white">MOVIE COMING SOON</a>
                 <div>
                     <router-link :to="{ name: 'profile', params: { id: 1 } }">
-                        <button class="text-xs md:text-xs lg:text-xs text-white font-normal">NGUYEN QUOC KHANH</button>
+                        <button class="text-xs md:text-xs lg:text-xs text-white font-normal">PROFILE</button>
                     </router-link>
+                    <span class="text-white font-normal"> / </span>
+                    <button @click="loginByGoogle" class="text-xs md:text-xs lg:text-xs text-white font-normal">LOGIN BY GOOGLE</button>
+                    <span class="text-white font-normal"> / </span>
+                    <button @click="loginByFacebook" class="text-xs md:text-xs lg:text-xs text-white font-normal">LOGIN BY FACEBOOK</button>
                     <span class="text-white font-normal"> / </span>
                     <button class="text-xs md:text-xs lg:text-xs text-white font-normal">LOG OUT</button>
                 </div>
@@ -34,7 +38,7 @@
             <button id="userButton" class="w-full border relative">
                 <i class="fa-solid fa-user text-gray-500 text-2xl p-2"></i>
                 <ul id="userMenuList" class="z-20 hidden absolute top-full left-0 w-full bg-sky-950 border">
-                    <a href="/profile/1" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">PROFILE</a>
+                    <a href="/profile" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">PROFILE</a>
                     <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">LOG OUT</a>
                 </ul>
             </button>
@@ -43,6 +47,9 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import axios from 'axios';
+
 onMounted(() => {
     document.getElementById('menuButton').addEventListener('click', function () {
         const icon = this.querySelector('i');
@@ -61,4 +68,26 @@ onMounted(() => {
     });
 
 })
+
+const loginByGoogle = () => {
+    
+    axios.get('http://localhost:8000/api/google-sign-in-url')
+        .then(response => {
+            window.location.href = response.data.url;
+        })
+        .catch(error => {
+            console.error('Error during Google login:', error);
+        });
+};
+
+const loginByFacebook = () => {
+    
+    axios.get('http://localhost:8000/api/facebook-sign-in-url')
+        .then(response => {
+            window.location.href = response.data.url;
+        })
+        .catch(error => {
+            console.error('Error during facebook login:', error);
+        });
+};
 </script>
