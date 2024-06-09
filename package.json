@@ -13,6 +13,7 @@
     "axios": "^1.6.8",
     "element-plus": "^2.3.5",
     "@types/node": "^20.2.3",
+    "firebase": "^10.12.2",
     "vee-validate": "^4.12.8",
     "vite-plugin-vue-setup-inherit-attrs": "^1.0.8",
     "vite-svg-loader": "^5.1.0",
