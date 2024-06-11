@@ -33,6 +33,10 @@
                         <label class="block text-gray-700">Email</label>
                         <input disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded">
                     </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Phone Number</label>
+                        <input v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded">
+                    </div>
                     <div class="text-center mt-5 mb-3">
                         <button @click="updateUserProfile"
                             class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
@@ -55,7 +59,8 @@ const route = useRoute();
 const userData = reactive({
     name: '',
     email: '',
-    avatar: ''
+    avatar: '',
+    phone_number: ''
 });
 
 const getUserProfile = async () => {
@@ -94,6 +99,7 @@ const updateUserProfile = async () => {
         const formData = new FormData();
         formData.append('name', userData.name);
         formData.append('email', userData.email);
+        formData.append('phone_number', userData.phone_number);
         if (avatarFile.value) {
             formData.append('avatar', avatarFile.value);
         }
