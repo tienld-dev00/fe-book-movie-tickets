@@ -1,40 +1,93 @@
 <template>
-    <div class="fixed w-full h-[50px] z-50 px-5 sp:px-3 flex justify-between items-center bg-white shadow-e2">
-        <div class="flex items-center gap-4">
-            <base-icon name="menu" class="cursor-pointer" @click="toggleMenu" />
+    <div class="flex flex-col md:flex-row">
+        <div class="flex justify-center p-2">
+            <router-link :to="{ name: 'movieIsShowing' }" class="inline-block mt-5">
+                <img src="/src/assets/img/logo.png" alt="Logo" class="w-full h-28 object-cover">
+            </router-link>
         </div>
-        Header
-        <div class="rounded-full w-[32px] h-[32px]">
-            <img :src="userInfo?.user_profile?.avatar_url ?? avatar_default" alt="" :title="userInfo?.name ?? null"
-                class="rounded-full w-full h-full" />
+        <div class="flex flex-col w-full justify-center">
+            <div class="flex justify-center text-white">
+                <div class="flex flex-col w-full items-end p-2">
+                    <span class="text-end text-xs font-normal">HOTLINE: 1234567890 - OPENING HOURS: 9:00-22:00</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex justify-between p-3 w-full items-center bg-colors_header-menu-50">
+                <a href="/movie-is-showing" class="text-xs md:text-sm lg:text-base text-white">MOVIE IS SHOWING</a>
+                <a href="/upcoming-movie" class="text-xs md:text-sm lg:text-base text-white">MOVIE COMING SOON</a>
+                <div>
+                    <router-link :to="{ name: 'profile', params: { id: 1 } }">
+                        <button class="text-xs md:text-xs lg:text-xs text-white font-normal">PROFILE</button>
+                    </router-link>
+                    <span class="text-white font-normal"> / </span>
+                    <button @click="loginByGoogle" class="text-xs md:text-xs lg:text-xs text-white font-normal">LOGIN BY GOOGLE</button>
+                    <span class="text-white font-normal"> / </span>
+                    <button @click="loginByFacebook" class="text-xs md:text-xs lg:text-xs text-white font-normal">LOGIN BY FACEBOOK</button>
+                    <span class="text-white font-normal"> / </span>
+                    <button class="text-xs md:text-xs lg:text-xs text-white font-normal">LOG OUT</button>
+                </div>
+            </nav>
+        </div>
+        <div class="md:hidden flex justify-between">
+            <button id="menuButton" class="w-full border relative">
+                <i class="fa-solid fa-bars text-gray-500 text-2xl p-2"></i>
+                <ul id="menuList" class="z-20 hidden absolute top-full left-0 w-full bg-sky-950 border">
+                    <a href="/movie-is-showing" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">MOVIE IS SHOWING</a>
+                    <a href="/upcoming-movie" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">MOVIE COMING SOON</a>
+                </ul>
+            </button>
+            <button id="userButton" class="w-full border relative">
+                <i class="fa-solid fa-user text-gray-500 text-2xl p-2"></i>
+                <ul id="userMenuList" class="z-20 hidden absolute top-full left-0 w-full bg-sky-950 border">
+                    <a href="/profile" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">PROFILE</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">LOG OUT</a>
+                </ul>
+            </button>
         </div>
     </div>
 </template>
 
-<script>
-import avatar_default from '@/assets/img/avatar_default.png'
-export default {
-    name: 'DefaultHeader',
-    props: {
-        isOpen: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    emits: ['toggle'],
-    data() {
-        return {
-        }
-    },
-    computed: {
-        userInfo() {
-            return this.$store.state.auth.user
-        },
-    },
-    methods: {
-        toggleMenu() {
-            this.$emit('toggle')
-        },
-    },
-}
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import axios from 'axios';
+
+onMounted(() => {
+    document.getElementById('menuButton').addEventListener('click', function () {
+        const icon = this.querySelector('i');
+        const menuList = document.getElementById('menuList');
+
+        icon.classList.toggle('text-red-500');
+        menuList.classList.toggle('hidden');
+    });
+
+    document.getElementById('userButton').addEventListener('click', function () {
+        const icon = this.querySelector('i');
+        const userMenuList = document.getElementById('userMenuList');
+
+        icon.classList.toggle('text-red-500');
+        userMenuList.classList.toggle('hidden');
+    });
+
+})
+
+const loginByGoogle = () => {
+    
+    axios.get('http://localhost:8000/api/google-sign-in-url')
+        .then(response => {
+            window.location.href = response.data.url;
+        })
+        .catch(error => {
+            console.error('Error during Google login:', error);
+        });
+};
+
+const loginByFacebook = () => {
+    
+    axios.get('http://localhost:8000/api/facebook-sign-in-url')
+        .then(response => {
+            window.location.href = response.data.url;
+        })
+        .catch(error => {
+            console.error('Error during facebook login:', error);
+        });
+};
 </script>
