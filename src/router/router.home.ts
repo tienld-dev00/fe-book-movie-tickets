@@ -8,19 +8,53 @@ const homeRouter: Array<RouteRecordRaw> = [
         name: 'home',
         redirect: '/',
         component: DefaultLayout,
-        meta: {
-            // middleware: [checkLogin],
-        },
         children: [
             {
                 path: '/',
-                name: 'home',
-                component: () => import('@/views/home/index.vue'),
+                name: 'movieIsShowing',
+                component: () => import('@/views/user/movieIsShowing/index.vue'),
             },
             {
-                path: '/user',
-                name: 'user',
-                component: () => import('@/views/user/index.vue'),
+                path: '/upcoming-movie',
+                name: 'upcomingMovie',
+                component: () => import('@/views/user/upcomingMovie/index.vue'),
+            },
+            {
+                path: '/movie-details',
+                name: 'movieDetails',
+                component: () => import('@/views/user/movieDetails/index.vue'),
+            },
+            {
+                path: '/booking',
+                name: 'booking',
+                component: () => import('@/views/user/booking/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
+            },
+            {
+                path: '/profile/:id',
+                name: 'profile',
+                component: () => import('@/views/user/profile/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
+            },
+            {
+                path: '/password-change',
+                name: 'changePassword',
+                component: () => import('@/views/user/changePassword/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
+            },
+            {
+                path: '/transaction-history',
+                name: 'transactionHistory',
+                component: () => import('@/views/user/transactionHistory/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
             },
         ],
     },
