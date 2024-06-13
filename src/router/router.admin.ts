@@ -19,6 +19,11 @@ const homeRouter: Array<RouteRecordRaw> = [
                 name: 'admin-user',
                 component: () => import('@/views/admin/user/index.vue'),
             },
+            {
+                path: 'category',
+                name: 'admin-category',
+                component: () => import('@/views/admin/Category/index.vue'),
+            },
         ],
     },
 ]

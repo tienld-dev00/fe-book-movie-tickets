@@ -12,7 +12,7 @@
                 </div>
             </div>
             <nav class="hidden md:flex justify-between p-3 w-full items-center bg-colors_header-menu-50">
-                <a href="/movie-is-showing" class="text-xs md:text-sm lg:text-base text-white">MOVIE IS SHOWING</a>
+                <a href="/" class="text-xs md:text-sm lg:text-base text-white">MOVIE IS SHOWING</a>
                 <a href="/upcoming-movie" class="text-xs md:text-sm lg:text-base text-white">MOVIE COMING SOON</a>
                 <div>
                     <router-link :to="{ name: 'profile', params: { id: 1 } }">
@@ -31,7 +31,7 @@
             <button id="menuButton" class="w-full border relative">
                 <i class="fa-solid fa-bars text-gray-500 text-2xl p-2"></i>
                 <ul id="menuList" class="z-20 hidden absolute top-full left-0 w-full bg-sky-950 border">
-                    <a href="/movie-is-showing" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">MOVIE IS SHOWING</a>
+                    <a href="/" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">MOVIE IS SHOWING</a>
                     <a href="/upcoming-movie" class="block px-4 py-2 text-sm text-white hover:bg-blue-800">MOVIE COMING SOON</a>
                 </ul>
             </button>
