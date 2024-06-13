@@ -3,9 +3,8 @@ import { Module } from 'vuex'
 import { RootState } from '@/store'
 import { AuthState } from '@/types'
 
-import { getUserProfile, login } from '@/api/modules/auth'
+import { getUserProfile, login, logout, register, getGoogleSignInUrl  } from '@/api/modules/auth'
 import { UserDetail } from '@/api/modules/auth/types'
-import { USER_ROLE } from '@/constants'
 
 const authModule: Module<AuthState, RootState> = {
     namespaced: true,
@@ -14,6 +13,10 @@ const authModule: Module<AuthState, RootState> = {
         user: null,
     },
     mutations: {
+        setAccessToken(state, accessToken: string){
+            state.access_token = accessToken
+            localStorage.setItem('access_token', accessToken)
+        },
         setUserProfile(state, user) {
             state.user = user
         },
@@ -26,11 +29,12 @@ const authModule: Module<AuthState, RootState> = {
     actions: {
         async login({ commit }, credentials) {
             try {
-                const auth = await login(credentials)
+                const res = await login(credentials)
 
-                commit('setUserProfile', auth.data)
+                commit('setAccessToken', res.access_token)
+                commit('setUserProfile', res.data)
 
-                return auth
+                return res
             } catch (error) {
                 return Promise.reject(error)
             }
@@ -58,13 +62,36 @@ const authModule: Module<AuthState, RootState> = {
                 return Promise.reject(error)
             }
         },
-        logout({ commit }) {
-            commit('logout')
+        async logout({ commit }) {
+            try {
+                await logout()
+                commit('logout')
+            } catch (error) {
+                return Promise.reject(error)
+            }
+        },
+        async register({ commit }, credentials) {
+            try {
+                await register(credentials)
+            } catch (error) {
+                return Promise.reject(error)
+            }
+        },
+        async googleSignInUrl() {
+            try {
+                const url = await getGoogleSignInUrl();
+                window.location.href = url;
+            } catch (error) {
+                return Promise.reject(error);
+            }
         },
     },
     getters: {
         isLoggedIn(state) {
-            return !!localStorage.getItem('access_token')
+            if (localStorage.getItem('access_token')) return true;
+            if (state.access_token) return true;
+
+            return false
         },
         currentUser(state) {
             return state.user

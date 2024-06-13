@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import DefaultLayout from '@/layout/defaultLayout.vue'
-// import { checkLogin } from '@/middleware/checkLogin'
+import { checkLogin } from '@/middleware/checkLogin'
 
 const homeRouter: Array<RouteRecordRaw> = [
     {
@@ -8,9 +8,6 @@ const homeRouter: Array<RouteRecordRaw> = [
         name: 'home',
         redirect: '/',
         component: DefaultLayout,
-        meta: {
-            // middleware: [checkLogin],
-        },
         children: [
             {
                 path: '/',
@@ -31,26 +28,33 @@ const homeRouter: Array<RouteRecordRaw> = [
                 path: '/booking',
                 name: 'booking',
                 component: () => import('@/views/user/booking/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
             },
             {
                 path: '/profile/:id',
                 name: 'profile',
                 component: () => import('@/views/user/profile/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
             },
             {
                 path: '/password-change',
                 name: 'changePassword',
                 component: () => import('@/views/user/changePassword/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
             },
             {
                 path: '/transaction-history',
                 name: 'transactionHistory',
                 component: () => import('@/views/user/transactionHistory/index.vue'),
-            },
-            {
-                path: '/user',
-                name: 'user',
-                component: () => import('@/views/user/index.vue'),
+                meta: {
+                    middleware: [checkLogin],
+                },
             },
         ],
     },

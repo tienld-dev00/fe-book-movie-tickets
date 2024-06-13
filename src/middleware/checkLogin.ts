@@ -28,7 +28,7 @@ export async function checkLogin(
         }
 
         if (to.name === 'login' || excludedRoutes.includes(to.name as string)) {
-            return next({ name: 'agent.home' })
+            return next({ name: 'home' })
         }
 
         next()

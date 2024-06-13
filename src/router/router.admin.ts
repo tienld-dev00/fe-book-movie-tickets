@@ -1,17 +1,18 @@
 import { RouteRecordRaw } from 'vue-router'
-// import { checkLogin } from '@/middleware/checkLogin'
+import { checkLogin } from '@/middleware/checkLogin'
 
 const homeRouter: Array<RouteRecordRaw> = [
     {
         path: '/admin',
+        name: 'admin',
         component: () => import('@/layout/adminLayout.vue'),
         meta: {
-            // middleware: [checkLogin],
+            middleware: [checkLogin],
         },
         children: [
             {
                 path: '',
-                name: 'admin-dashboard',
+                name: 'admin_dashboard',
                 component: () => import('@/views/admin/index.vue'),
             },
             {
