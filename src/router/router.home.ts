@@ -23,7 +23,7 @@ const homeRouter: Array<RouteRecordRaw> = [
                 component: () => import('@/views/user/upcomingMovie/index.vue'),
             },
             {
-                path: '/movie-details',
+                path: '/:slug',
                 name: 'movieDetails',
                 component: () => import('@/views/user/movieDetails/index.vue'),
             },

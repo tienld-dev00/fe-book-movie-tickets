@@ -1,0 +1,6 @@
+{
+    "error": {
+        "UNEXPECTED_ERROR": "An unexpected error has occurred. Please try again.",
+        "MAXIMUM_ORDER" :"Only a maximum of 5 seats can be selected"
+    }
+}
