@@ -13,7 +13,7 @@ const authRouter: Array<RouteRecordRaw> = [
     {
         path: '/page-error',
         name: 'page_error',
-        component: () => import('@/views/page-error/index.vue'),
+        component: () => import('@/views/user/page-error/index.vue'),
     },
     {
         path: '/:pathMatch(.*)*',
