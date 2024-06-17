@@ -2,7 +2,7 @@
     <div v-show="isLoadingPage" class="flex items-center justify-center h-screen">
         <base-loading :loading="isLoadingPage" />
     </div>
-    <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+    <div v-show="!isLoadingPage" class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-2xl font-bold text-orange-800 uppercase">{{ data.room }}</h2>
             <div class="flex items-center mr-2">
