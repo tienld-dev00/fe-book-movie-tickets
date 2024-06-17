@@ -3,9 +3,21 @@
         <base-loading :loading="isLoadingPage" />
     </div>
     <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-        <!-- Seat Selection Header -->
-        <h2 class="text-2xl font-bold mb-6 text-orange-800 uppercase">{{ data.room }}</h2>
-
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-orange-800 uppercase">{{ data.room }}</h2>
+            <div class="flex items-center mr-2">
+                <h2 class="text-xl font-bold text-orange-800">Thời gian chọn ghế còn lại:</h2>
+                <div class="clock rounded border border-red-500 p-1 w-fit ml-2">
+                    <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
+                        minutes !== undefined ? `${minutes}`.toString().padStart(2, '0') : '00'
+                    }}</span>
+                    :
+                    <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
+                        seconds !== undefined ? `${seconds}`.toString().padStart(2, '0') : '00'
+                    }}</span>
+                </div>
+            </div>
+        </div>
         <!-- Seat Grid -->
         <div class="lg:flex">
             <div class="lg:w-3/4">
@@ -15,19 +27,16 @@
                 </div>
                 <div class="flex justify-center mb-1">
                     <div class="p-1" v-for="seat in data.seats" :key="seat.id">
-                        <button :class="['w-10 h-10 rounded text-sm', checkSeat(seat.id)]" @click="toggleSeat(seat)">
+                        <button
+                            :class="['w-10 h-10 rounded text-sm', checkSeat(seat.id).class]"
+                            @click="toggleSeat(seat)"
+                            :disabled="checkSeat(seat.id).disabled"
+                        >
                             {{ seat.name }}
                         </button>
                     </div>
                     <!-- Add more seats as needed -->
                 </div>
-                <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
-                    `${minutes}`.toString().padStart(2, '0')
-                }}</span>
-                :
-                <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
-                    `${seconds}`.toString().padStart(2, '0')
-                }}</span>
             </div>
             <div class="lg:w-1/4 lg:pl-4">
                 <img :src="data.movie?.image ?? ''" alt="Doraemon Movie" class="w-[250px] mb-4 mx-auto" />
@@ -142,13 +151,13 @@ function setupRealtimeListener() {
 function checkSeat(id) {
     const seatInData = seatsFirebase.value.find((dataSeat) => dataSeat.id == id)
     if (seatInData) {
-        if (seatInData.user_id === userID) {
-            return 'bg-yellow-400 hover:bg-yellow-300'
+        if (seatInData.user_id === userID && !seatInData.status) {
+            return { class: 'bg-yellow-400 hover:bg-yellow-300', disabled: false }
         } else {
-            return 'bg-green-500 cursor-not-allowed'
+            return { class: 'bg-green-500 cursor-not-allowed', disabled: true }
         }
     }
-    return 'bg-gray-300 hover:bg-gray-100'
+    return { class: 'bg-gray-300 hover:bg-gray-100', disabled: false }
 }
 
 async function toggleSeat(seat) {
@@ -235,7 +244,6 @@ const selectedSeats = computed(() => {
 })
 
 const getShowtimeDetail = async () => {
-    console.log('đang chạy api')
     const response = await showtime.showtimeDetail(showtimeId.value)
     data.value = response.data
 }
