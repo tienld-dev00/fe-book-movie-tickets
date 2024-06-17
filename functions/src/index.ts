@@ -8,7 +8,7 @@
 // export const removeExpiredDocuments = functions.pubsub.schedule('* * * * *')
 //     .onRun(async (context) => {
 //         const now = admin.firestore.Timestamp.now();
-//         const fiveMinutesAgo = admin.firestore.Timestamp.fromMillis(now.toMillis() - 2 * 60 * 1000);
+//         const fiveMinutesAgo = admin.firestore.Timestamp.fromMillis(now.toMillis() - 5 * 60 * 1000);
 //         const expiredTasks = await db.collection('seats')
 //             .where("created_at", "<", fiveMinutesAgo)
 //             .get();
