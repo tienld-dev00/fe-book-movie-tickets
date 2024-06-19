@@ -15,15 +15,15 @@
         </div>
         <div class="flex flex-col bg-colors_header-menu-50">
             <hr class="border-b border-gray-500 w-full mb-3">
-            <div class="flex mx-52">
-                <div class="w-1/2">
+            <div class="flex flex-col lg:flex-row lg:mx-10">
+                <div class="lg:w-1/2">
                     <div class="flex flex-col h-full justify-center">
                         <div class="flex justify-center p-2">
                             <div class="inline-block">
                                 <img src="/src/assets/img/logo.png" alt="Logo" class="w-full h-48 object-cover">
                             </div>
                         </div>
-                        <span class="font-normal text-white text-xs md:text-sm lg:text-base">
+                        <span class="font-normal text-white text-xs md:text-sm lg:text-base text-center lg:text-start">
                             Business Name: FLYDINO TECHNOLOGY VINA COMPANY LIMITED. <br>
                             Issuing agency: Business Registration Office - Department of Planning and Investment of Da
                             Nang City, <br>
@@ -33,16 +33,14 @@
                         </span>
                     </div>
                 </div>
-                <div class="w-1/2 mb-6 mt-2">
-                    <iframe
+                <div class="w-1/2 mb-6 mt-2 ml-2 mr-2 ">
+                    <iframe class="w-[414px] h-[250px] sm:w-[500px] sm:h-[350px] lg:w-[580px] lg:h-[350px]"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d516.7885968369719!2d108.18500523618678!3d16.070073091962573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314218fe86da1fcb%3A0xd7bfb81e2f1db53b!2zTmjDoCBTw6FjaCBMacOqbiBIb2E!5e0!3m2!1svi!2s!4v1717476613530!5m2!1svi!2s"
-                        width="580" height="350" style="border:0;" allowfullscreen="" loading="lazy"
+                        style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 <script>

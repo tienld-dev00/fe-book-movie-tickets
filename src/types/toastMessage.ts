@@ -4,3 +4,8 @@ export enum ToastType {
     ERROR = 'ERROR',
     INFO = 'INFO',
 }
+
+export enum GoogleCallBack {
+    SUCCESS = 'SUCCESS',
+    ERROR = 'Sign in with Google failed.',
+}
