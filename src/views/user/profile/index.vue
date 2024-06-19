@@ -8,7 +8,7 @@
                 <div class="flex flex-col mt-5 md:mt-0">
                     <span class="bg-colers_text-700 py-3 text-center text-white">ACCOUNT INFORMATION</span>
                 </div>
-                <form class="ml-5 mr-5" @submit.prevent>
+                <form class="ml-5 mr-5" @submit.prevent="updateUserProfile">
                     <div class="md:mt-4 mb-4 text-center">
                         <div class="relative inline-block">
                             <img :src="avatarUrl" alt="Avatar" class="w-32 h-32 rounded-full object-cover">
@@ -33,8 +33,12 @@
                         <label class="block text-gray-700">Email</label>
                         <input disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded">
                     </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Phone Number</label>
+                        <input v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded">
+                    </div>
                     <div class="text-center mt-5 mb-3">
-                        <button @click="updateUserProfile"
+                        <button type="submit"
                             class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
                     </div>
                 </form>
@@ -42,12 +46,11 @@
         </div>
     </div>
 </template>
-
 <script setup lang="ts">
-import { user } from '@/api/modules/user';
+import { getUserProfile, updateProfile } from '@/api/modules/auth/index';
+import { reactive, ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import DefaultHeaderProfile from '@/components/organisms/DefaultHeaderProfile.vue';
-import { reactive, onMounted } from 'vue';
 import { showToast } from '@/utils/toastHelper';
 import { ToastType } from '@/types';
 
@@ -55,21 +58,8 @@ const route = useRoute();
 const userData = reactive({
     name: '',
     email: '',
-    avatar: ''
-});
-
-const getUserProfile = async () => {
-    try {
-        const userId = route.params.id;
-        const response = await user.detail(Number(userId));
-        Object.assign(userData, response.data);
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-    }
-};
-
-onMounted(() => {
-    getUserProfile();
+    avatar: '',
+    phone_number: ''
 });
 
 const avatarFile = ref<File | null>(null);
@@ -90,19 +80,28 @@ const handleAvatarChange = (event: Event) => {
 
 const updateUserProfile = async () => {
     try {
-        const userId = route.params.id;
         const formData = new FormData();
         formData.append('name', userData.name);
         formData.append('email', userData.email);
+        formData.append('phone_number', userData.phone_number);
         if (avatarFile.value) {
             formData.append('avatar', avatarFile.value);
         }
 
-        const response = await user.update(formData, Number(userId));
+        const response = await updateProfile(formData);
         console.log('User profile updated:', response);
         showToast('Update successful', ToastType.SUCCESS)
     } catch (error) {
         console.error('Error updating user profile:', error);
     }
 };
+
+onMounted(async () => {
+    try {
+        const profileData = await getUserProfile();
+        Object.assign(userData, profileData);
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+    }
+});
 </script>

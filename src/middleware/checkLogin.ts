@@ -1,7 +1,7 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import store from '@/store'
 import { UserDetail } from '@/api/modules/auth/types'
-import { LANGUAGE, USER_ROLE } from '@/constants'
+// import { LANGUAGE, USER_ROLE } from '@/constants'
 import { USER_STATUS } from '@/constants'
 
 export async function checkLogin(
@@ -28,7 +28,7 @@ export async function checkLogin(
         }
 
         if (to.name === 'login' || excludedRoutes.includes(to.name as string)) {
-            return next({ name: 'agent.home' })
+            return next({ name: 'home' })
         }
 
         next()

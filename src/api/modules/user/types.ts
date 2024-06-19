@@ -17,6 +17,7 @@ export interface UserData {
     avatar?: string
     role: number
     status: number
+    phone_number?: string
 }
 
 export interface FormUserData {
@@ -27,6 +28,7 @@ export interface FormUserData {
     email?: string
     password?: boolean | string
     status: number
+    phone_number?: string
 }
 
 export interface DetailAccountStaffResponse {

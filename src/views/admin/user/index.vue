@@ -14,10 +14,18 @@
             <el-table-column prop="id" label="Id" width="70" />
             <el-table-column prop="name" label="Name" />
             <el-table-column prop="email" label="Email" />
-            <el-table-column prop="avatar" label="Avatar" width="180" />
+            <el-table-column prop="phone_number" label="Phone Number" />
+            <el-table-column label="Avatar" width="180">
+                <template #default="{ row }">
+                    <img :src="`http://localhost:8000/avatars/${row.avatar}`" alt="Avatar"
+                    class="w-24 h-24 rounded-full object-cover"/>
+                </template>
+            </el-table-column>
             <el-table-column label="Status" width="180">
                 <template #default="{ row }">
-                    <span>{{ getStatusLabel(row.status) }}</span>
+                    <span :class="{'text-green-500': row.status === USER_STATUS.ACTIVE, 'text-yellow-500': row.status === USER_STATUS.LOCK}">
+                        {{ getStatusLabel(row.status) }}
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="Action" width="180">
@@ -42,6 +50,10 @@
                 <input v-model="update.email" type="email" class="w-full mt-2 p-2 border rounded">
             </div>
             <div class="mb-4">
+                <label class="block text-gray-700">Phone Number</label>
+                <input v-model="update.phone_number" type="text" class="w-full mt-2 p-2 border rounded">
+            </div>
+            <div class="mb-4">
                 <label class="block text-gray-700">Status</label>
                 <select v-model="update.status" class="w-full mt-2 p-2 border rounded">
                     <option :value="USER_STATUS.ACTIVE">ACTIVE</option>
@@ -57,16 +69,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { user } from '@/api/modules/user'
-// console.log("🚀 ~ user:", user)
 import { FormSearchUser, UserData } from '@/api/modules/user/types'
 import { USER_STATUS } from '@/constants';
 import { showToast } from '@/utils/toastHelper';
 import { ToastType } from '@/types';
 
 const userData = ref<UserData[]>([])
-// console.log("🚀 ~ userData:", userData)
 const formSearch = reactive<FormSearchUser>({
     valueSearch: '',
 })
@@ -90,7 +100,8 @@ const update = reactive({
     email: '',
     avatar: '',
     role: '',
-    status: ''
+    status: '',
+    phone_number: ''
 });
 
 const modalUpdate = ref(false)
@@ -110,8 +121,6 @@ const updateUser = async () => {
     try {
         if (update.id !== null) {
             const response = await user.update(update, update.id);
-            console.log("🚀 ~ updateUser ~ update.id:", update.id)
-            console.log('User profile updated:', response);
             showToast('Update successful', ToastType.SUCCESS)
             await getList(); // Cập nhật danh sách người dùng sau khi cập nhật thành công
         }
@@ -125,3 +134,4 @@ onMounted(async () => {
     await getList();
 })
 </script>
+

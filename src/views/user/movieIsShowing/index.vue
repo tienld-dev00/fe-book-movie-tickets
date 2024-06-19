@@ -6,7 +6,7 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
             <!-- Card 1 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">
@@ -31,7 +31,7 @@
 
             <!-- Card 2 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">
@@ -56,7 +56,7 @@
 
             <!-- Card 3 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">
@@ -81,7 +81,7 @@
 
             <!-- Card 4 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">
@@ -106,7 +106,7 @@
 
             <!-- Card 5 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">
@@ -131,7 +131,7 @@
 
             <!-- Card 6 -->
             <div class="bg-white shadow-lg rounded-lg">
-                <router-link :to="{ name: 'movieDetails' }">
+                <router-link :to="{ name: 'movieDetails',params: {slug: '12345678'} }">
                     <div class="relative flex justify-center">
                         <img class="w-[195px] h-[265px] xl:w-[225px] xl:h-[285px] rounded"
                             src="https://metiz.vn/media/poster_film/drm24_-_poster.jpg" alt="Movie Poster">

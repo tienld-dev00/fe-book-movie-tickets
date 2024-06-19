@@ -1,7 +1,7 @@
 import axios from '@/api/axios'
 import { DetailUserResponse, FormSearchUser, ListUserResponse, FormUserData, UserData } from './types'
 
-const resource = '/users'
+const resource = '/admin/users'
 const headers = {
     'Content-Type': 'multipart/form-data',
 }
