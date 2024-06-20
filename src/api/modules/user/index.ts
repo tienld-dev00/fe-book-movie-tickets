@@ -1,5 +1,5 @@
 import axios from '@/api/axios'
-import { DetailUserResponse, FormSearchUser, ListUserResponse, FormUserData, UserData } from './types'
+import { FormSearchUser, FormUserData, UserData } from './types'
 
 const resource = '/admin/users'
 const headers = {
@@ -12,7 +12,7 @@ export const user = {
         return response
     },
     detail: (id: number): Promise<any> => axios.get(`${resource}/show/${id}`),
-    create: (data: FormUserData): Promise<DetailUserResponse> => axios.post(`${resource}`, data, { headers }),
+    create: (data: FormUserData): Promise<void> => axios.post(`${resource}`, data, { headers }),
     update: async (formData: FormUserData, id: number): Promise<any> => {
         return await axios.post(`${resource}/update/${id}`, formData, { headers})
     },

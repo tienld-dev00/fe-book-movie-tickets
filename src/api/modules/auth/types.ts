@@ -35,3 +35,12 @@ export interface ChangePasswordRequest {
     new_password_confirmation: string | undefined
 }
 
+export interface checkForgotPasswordRequest {
+    email: string | undefined
+}
+
+export interface ResetPasswordRequest {
+    verification_code: string | undefined
+    password: string | undefined
+    password_confirmation: string | undefined
+}
