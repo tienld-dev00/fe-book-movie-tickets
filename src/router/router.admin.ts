@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router'
 // import { checkLogin } from '@/middleware/checkLogin'
 
-const homeRouter: Array<RouteRecordRaw> = [
+const adminRouter: Array<RouteRecordRaw> = [
     {
         path: '/admin',
         component: () => import('@/layout/adminLayout.vue'),
@@ -14,8 +14,13 @@ const homeRouter: Array<RouteRecordRaw> = [
                 name: 'admin-dashboard',
                 component: () => import('@/views/admin/index.vue'),
             },
+            {
+                path: 'order',
+                name: 'admin-order',
+                component: () => import('@/views/admin/order/index.vue'),
+            },
         ],
     },
 ]
 
-export default homeRouter
+export default adminRouter
