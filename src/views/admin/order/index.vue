@@ -238,7 +238,7 @@ const handleSearchChange = async (searchText: string) => {
 
     timeoutId = setTimeout(async () => {
         isLoadingTable.value = true
-        const res = await order.list({ page: metaData.current_page, keyword: searchText })
+        const res = await order.list({ keyword: searchText })
         orders.value = res.data
         Object.assign(metaData, res.meta)
         isLoadingTable.value = false
