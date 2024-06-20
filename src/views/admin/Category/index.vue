@@ -77,7 +77,8 @@ const getList = async () => {
         const response = await category.list(formSearch)
         categoryData.value = response
     } catch (error) {
-        console.error('error', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
 }
 
@@ -95,7 +96,8 @@ const editCategory = async (id: number) => {
         update.id = id // Gán id vào update
         modalUpdate.value = true // Hiển thị modal
     } catch (error) {
-        console.error('Error fetching category profile:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
 }
 
@@ -107,7 +109,8 @@ const updateCategory = async () => {
             await getList();
         }
     } catch (error) {
-        console.error('Error updating category profile:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
     modalUpdate.value = false
 }
@@ -124,7 +127,8 @@ const createCategory = async () => {
         await getList();
         create.name = '';
     } catch (error) {
-        console.error('Error creating category:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
     modalCreate.value = false;
 }

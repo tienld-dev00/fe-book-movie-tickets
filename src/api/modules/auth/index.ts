@@ -1,5 +1,12 @@
 import axios from '@/api/axios'
-import { LoginRequest, LoginResponse, UserDetail, RegisterRequest, ChangePasswordRequest } from './types'
+import { LoginRequest, 
+    LoginResponse, 
+    UserDetail, 
+    RegisterRequest, 
+    ChangePasswordRequest, 
+    checkForgotPasswordRequest, 
+    ResetPasswordRequest 
+} from './types'
 
 const headers = {
     'Content-Type': 'multipart/form-data',
@@ -72,6 +79,22 @@ export const changePassword = async (data: ChangePasswordRequest): Promise<void>
     try {
         const response = await axios.post('/auth/change-password', data);
         return response.data;
+    } catch (error) {
+        return Promise.reject(error)
+    }
+};
+
+export const checkForgotPassword = async (data: checkForgotPasswordRequest): Promise<void> => {
+    try {
+        await axios.post('/auth/check-forgot-password', data);
+    } catch (error) {
+        return Promise.reject(error)
+    }
+};
+
+export const ResetPassword = async (data: ResetPasswordRequest): Promise<void> => {
+    try {
+        await axios.post('/auth/resetPassword', data);
     } catch (error) {
         return Promise.reject(error)
     }
