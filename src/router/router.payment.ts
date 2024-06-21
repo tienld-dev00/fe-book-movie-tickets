@@ -11,7 +11,7 @@ const checkoutRouter: Array<RouteRecordRaw> = [
             {
                 path: 'result',
                 name: 'payment-result',
-                component: () => import('@/views/payment-result/index.vue'),
+                component: () => import('@/views/user/payment-result/index.vue'),
             },
         ],
     },

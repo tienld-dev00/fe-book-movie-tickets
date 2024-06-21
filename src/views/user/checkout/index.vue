@@ -24,18 +24,20 @@
                 <h3 class="text-2xl">Thông tin đơn hàng</h3>
                 <hr />
                 <!-- <span>Mã đơn: {{ orderId }}</span> -->
-                <h4 class="text-base font-semibold">ĐẶT VÉ PHIM {{ movie.name }}</h4>
-                <span class="text-sm font-normal"> Bắt đầu ngày {{ showtime.start_time }} tại {{ room.name }} </span>
+                <h4 class="text-base font-semibold">Đặt vé phim {{ showtimeData.movie?.name }}</h4>
+                <span class="text-sm font-normal">
+                    Bắt đầu ngày {{ showtimeData.start_time }} tại {{ showtimeData.room }}
+                </span>
                 <hr />
                 <span>Ghế đã chọn</span>
                 <div class="flex justify-between text-sm font-normal" v-for="item in seats" :key="item.id">
                     <span> Ghế {{ item.name }}</span>
-                    <span class="font-bold">${{ showtime.price / 100 }}</span>
+                    <span class="font-bold">${{ showtimeData.price }}</span>
                 </div>
                 <hr />
                 <div class="flex items-center justify-between">
                     <span>Tổng cộng</span>
-                    <span class="text-lg font-bold text-blue-400">${{ (showtime.price * seats.length) / 100 }}</span>
+                    <span class="text-lg font-bold text-blue-400">${{ showtimeData.price * seats.length }}</span>
                 </div>
             </div>
 
@@ -61,9 +63,12 @@
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { stripePaymentIntent } from '@/api/modules/payment'
 import { ToastType } from '@/types'
-import app from '@/configs/firebase'
-import { collection, getFirestore, onSnapshot, query, deleteDoc, where, getDocs } from 'firebase/firestore'
+import { fireStore } from '@/configs/firebase'
+import { collection, onSnapshot, query, deleteDoc, where } from 'firebase/firestore'
 import { showToast } from '@/utils/toastHelper'
+import store from '@/store'
+import { showtime } from '@/api/modules/showtime/index'
+import { Showtime } from '@/api/modules/showtime/types'
 
 const seats = ref<
     Array<{
@@ -75,12 +80,7 @@ const seats = ref<
     }>
 >([])
 
-const showtime = reactive({
-    id: 1,
-    start_time: '2024-06-10 14:00:00',
-    end_time: '2024-06-10 16:00:00',
-    price: 250,
-})
+const showtimeData = reactive({}) as Showtime
 
 const movie = reactive({
     id: 1,
@@ -101,8 +101,9 @@ const minutes = ref()
 const seconds = ref()
 const orderId = ref(0)
 
-const db = getFirestore(app)
 const previousPath = (router.options.history.state.back as string) ?? '/'
+const showtimeId = store.getters['showtime/selectedShowtime']
+
 let countDownDate: number
 let isGetDataFirstTime = true
 let intervalId: any
@@ -124,7 +125,11 @@ const handleCountdown = (docs) => {
         seconds.value = Math.floor((distance % (1000 * 60)) / 1000)
 
         /** if the remaining transaction time is less than 0 seconds and is not in the payment process */
-        if (seconds.value <= 0 && minutes.value <= 0 && !isPaymentInProgress.value) {
+        if (seconds.value <= 0 && minutes.value <= 0) {
+            if (isPaymentInProgress.value) {
+                clear()
+                return
+            }
             clear()
             deleteAllSeatInFirestore(docs)
             showToast('Đã hết thời gian giao dịch.', ToastType.WARNING)
@@ -163,12 +168,19 @@ const clear = () => {
 
 onMounted(async () => {
     try {
+        if (!showtimeId) {
+            router.push({ path: previousPath, replace: true })
+            return
+        }
+        const res = await showtime.showtimeDetail(showtimeId)
+        Object.assign(showtimeData, res.data)
+
         /** prepare query get seats selected from firebase */
-        const tasksCollection = collection(db, 'seats')
+        const tasksCollection = collection(fireStore, 'seats')
         const seatsSelectedQuery = query(
             tasksCollection,
             where('user_id', '==', 1),
-            where('showtime_id', '==', showtime.id),
+            where('showtime_id', '==', showtimeId),
             where('status', '==', false)
         )
 
@@ -184,19 +196,8 @@ onMounted(async () => {
                     return
                 }
 
-                /** set countDownDate with created time of first selected seat and add 5 minute */
-                countDownDate =
-                    snapshot.docs
-                        .reduce((earliest, current) => {
-                            const currentTime = current.data().created_at.toDate()
-                            const earliestTime = earliest.data().created_at.toDate()
-
-                            return currentTime < earliestTime ? current : earliest
-                        }, snapshot.docs[0])
-                        .data()
-                        .created_at.toDate()
-                        .getTime() +
-                    5 * 60 * 1000
+                /** set countDownDate 4:30 minute from created_at of seat (all seats selected is same time created_at) */
+                countDownDate = snapshot.docs[0].data().created_at.toDate().getTime() + 4.5 * 60 * 1000
 
                 /** set value for seats */
                 snapshot.forEach((document) => {
@@ -213,7 +214,7 @@ onMounted(async () => {
                         /** Create payment intent */
                         const response = await stripePaymentIntent.processPayment({
                             seats: toRaw(seats.value).map((seat) => seat.id),
-                            showtime_id: showtime.id,
+                            showtime_id: showtimeId,
                         })
 
                         /** @ts-ignore */

@@ -9,13 +9,9 @@ const checkoutRouter: Array<RouteRecordRaw> = [
             {
                 path: '',
                 name: 'checkout',
-                component: () => import('@/views/checkout/index.vue'),
+                component: () => import('@/views/user/checkout/index.vue'),
             },
         ],
-    },
-    {
-        path: '/create-order-example',
-        component: () => import('@/views/create-order-example/index.vue'),
     },
 ]
 
