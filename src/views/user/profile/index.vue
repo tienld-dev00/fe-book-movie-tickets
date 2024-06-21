@@ -92,7 +92,8 @@ const updateUserProfile = async () => {
         console.log('User profile updated:', response);
         showToast('Update successful', ToastType.SUCCESS)
     } catch (error) {
-        console.error('Error updating user profile:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
 };
 
@@ -101,6 +102,7 @@ onMounted(async () => {
         const profileData = await getUserProfile();
         Object.assign(userData, profileData);
     } catch (error) {
+        showToast(Object.values(error)[0], ToastType.WARNING)
         console.error('Error fetching user profile:', error);
     }
 });

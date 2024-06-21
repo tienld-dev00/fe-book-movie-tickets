@@ -25,18 +25,23 @@ const authRouter: Array<RouteRecordRaw> = [
         component: () => import('@/views/auth/GoogleCallback/index.vue'),
     },
     {
-        path: '/forgot-password',
-        name: '/forgot_password',
-        component: () => import('@/views/auth/forgotPassword/index.vue'),
-    },
-    {
         path: '/verify-account',
-        name: '/verify_account',
+        name: 'verify_account',
         component: () => import('@/views/auth/VerifyAccount/index.vue'),
     },
     {
+        path: '/forgot-password',
+        name: 'forgot_password',
+        component: () => import('@/views/auth/forgotPassword/index.vue'),
+    },
+    {
+        path: '/reset-password',
+        name: 'reset_password',
+        component: () => import('@/views/auth/ResetPassword/index.vue'),
+    },
+    {
         path: '/confirmed-account',
-        name: '/confirmed_account',
+        name: 'confirmed_account',
         component: () => import('@/views/auth/ConfirmedAccount/index.vue'),
     },
 ]

@@ -6,7 +6,6 @@
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item>My profile</el-dropdown-item>
                     <el-dropdown-item @click="handleLogout">Log out </el-dropdown-item>
                 </el-dropdown-menu>
             </template>

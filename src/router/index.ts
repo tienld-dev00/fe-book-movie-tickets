@@ -2,8 +2,16 @@ import { createRouter, createWebHistory, NavigationGuard, RouteRecordRaw } from 
 import authRouter from '@/router/router.auth'
 import homeRouter from './router.home'
 import adminRouter from '@/router/router.admin'
+import checkoutRouter from '@/router/router.checkout'
+import paymentRouter from '@/router/router.payment'
 
-const routes: Array<RouteRecordRaw> = [...adminRouter, ...authRouter, ...homeRouter]
+const routes: Array<RouteRecordRaw> = [
+    ...paymentRouter,
+    ...adminRouter,
+    ...authRouter,
+    ...homeRouter,
+    ...checkoutRouter,
+]
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),

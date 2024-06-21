@@ -89,7 +89,7 @@ const handleChangePassword = async () => {
         userData.new_password = '';
         userData.new_password_confirmation = '';
     } catch (error: any) {
-        console.log("🚀 ~ handleChangePassword ~ error:", error.message.message)
+        showToast(Object.values(error)[0], ToastType.ERROR)
         showToast(error.message.message, ToastType.ERROR);
     }
 };

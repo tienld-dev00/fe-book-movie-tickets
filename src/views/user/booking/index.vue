@@ -94,7 +94,7 @@
                     }}
                 </p>
             </div>
-            <button class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400">Tiếp tục</button>
+            <button @click="$router.push({name:'checkout'})" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400">Tiếp tục</button>
         </div>
     </div>
 </template>

@@ -47,7 +47,7 @@
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700">Email</label>
-                <input v-model="update.email" type="email" class="w-full mt-2 p-2 border rounded">
+                <input disabled v-model="update.email" type="email" class="w-full mt-2 p-2 border rounded">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700">Phone Number</label>
@@ -113,7 +113,8 @@ const editUser = async (id: number) => {
         update.id = id // Gán id vào update
         modalUpdate.value = true // Hiển thị modal
     } catch (error) {
-        console.error('Error fetching user profile:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
 }
 
@@ -125,7 +126,8 @@ const updateUser = async () => {
             await getList(); // Cập nhật danh sách người dùng sau khi cập nhật thành công
         }
     } catch (error) {
-        console.error('Error updating user profile:', error);
+        showToast(Object.values(error)[0], ToastType.WARNING)
+        showToast(error.message, ToastType.ERROR)
     }
     modalUpdate.value = false
 }

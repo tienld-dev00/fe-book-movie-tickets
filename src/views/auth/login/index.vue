@@ -178,14 +178,15 @@ const handleLogin = async () => {
         } else {
             throw new Error("Invalid user role")
         }
-    } catch (error: any) {
+    } catch (error) {
+        showToast(Object.values(error)[0], ToastType.WARNING)
         showToast(error.message, ToastType.ERROR)
     }
 }
 
 const handleRegister = async () => {
     if (register.password !== register.password_confirmation) {
-        showToast("Passwords do not match", ToastType.ERROR)
+        showToast("Passwords do not match", ToastType.WARNING)
         return
     }
 
@@ -207,6 +208,7 @@ const handleRegister = async () => {
         register.password_confirmation = '';
         router.push({ path: '/verify-account' });
     } catch (error: any) {
+        showToast(Object.values(error)[0], ToastType.WARNING)
         showToast(error.message, ToastType.ERROR)
     }
 }
