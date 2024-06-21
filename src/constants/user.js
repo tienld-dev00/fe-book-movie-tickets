@@ -12,7 +12,6 @@ export const USER_GENDER = {
 }
 
 export const USER_STATUS = {
-    DRAFT: 0,
-    INACTIVE: 5,
-    ACTIVE: 10,
+    ACTIVE: 0,
+    LOCK: 1,
 }

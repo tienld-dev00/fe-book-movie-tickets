@@ -18,4 +18,29 @@ export interface UserDetail {
     email: string
     avatar: string
     status: number
+    phone_number: string
+}
+
+export interface RegisterRequest {
+    name: string | undefined
+    email: string | undefined
+    phone_number: string | undefined
+    password: string | undefined
+    password_confirmation: string | undefined
+}
+
+export interface ChangePasswordRequest {
+    old_password: string | undefined
+    new_password: string | undefined
+    new_password_confirmation: string | undefined
+}
+
+export interface checkForgotPasswordRequest {
+    email: string | undefined
+}
+
+export interface ResetPasswordRequest {
+    verification_code: string | undefined
+    password: string | undefined
+    password_confirmation: string | undefined
 }
