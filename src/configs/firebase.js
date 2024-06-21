@@ -16,4 +16,4 @@ const firebaseApp = initializeApp({
 const fireStore = getFirestore(firebaseApp)
 
 // here we can export reusable database references
-export {fireStore}
+export { fireStore }
