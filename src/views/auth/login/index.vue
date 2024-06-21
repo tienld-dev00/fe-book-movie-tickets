@@ -201,12 +201,15 @@ const handleRegister = async () => {
         showToast("Registration successful", ToastType.SUCCESS)
 
         // Clear input fields after successful registration
-        register.name = '';
-        register.email = '';
-        register.phone_number = '';
-        register.password = '';
-        register.password_confirmation = '';
-        router.push({ path: '/verify-account' });
+        // register.name = '';
+        // register.email = '';
+        // register.phone_number = '';
+        // register.password = '';
+        // register.password_confirmation = '';
+        router.push({
+            path: '/verify-account',
+            query: { email: register.email }
+        });
     } catch (error: any) {
         showToast(Object.values(error)[0], ToastType.WARNING)
         showToast(error.message, ToastType.ERROR)
