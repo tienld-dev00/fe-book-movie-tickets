@@ -4,7 +4,7 @@
     </div>
     <div v-show="!isLoadingPage" class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-2xl font-bold text-orange-800 uppercase">{{ data.room }}</h2>
+            <h2 class="text-2xl font-bold text-orange-800 uppercase">{{ data.room && data.room.name }}</h2>
             <div class="flex items-center mr-2">
                 <h2 class="text-xl font-bold text-orange-800">Thời gian chọn ghế còn lại:</h2>
                 <div class="clock rounded border border-red-500 p-1 w-fit ml-2">
@@ -25,9 +25,11 @@
                 <div class="text-center mb-4">
                     <div class="bg-gray-300 h-10 w-full rounded-t-lg flex items-center justify-center">MÀN HÌNH</div>
                 </div>
-                <div class="flex justify-center mb-1">
-                    <div class="p-1" v-for="seat in data.seats" :key="seat.id">
+                <div class="flex flex-col w-full gap-3">
+                    <div v-for="(row, key) in seats" :key="key" class="flex items-center gap-4 mx-auto">
                         <button
+                            v-for="seat in row"
+                            :key="seat.id"
                             :class="['w-10 h-10 rounded text-sm', checkSeat(seat.id).class]"
                             @click="toggleSeat(seat)"
                             :disabled="checkSeat(seat.id).disabled"
@@ -35,7 +37,6 @@
                             {{ seat.name }}
                         </button>
                     </div>
-                    <!-- Add more seats as needed -->
                 </div>
             </div>
             <div class="lg:w-1/4 lg:pl-4">
@@ -94,7 +95,12 @@
                     }}
                 </p>
             </div>
-            <button @click="$router.push({name:'checkout'})" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400">Tiếp tục</button>
+            <button
+                @click="$router.push({ name: 'checkout' })"
+                class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400"
+            >
+                Tiếp tục
+            </button>
         </div>
     </div>
 </template>
@@ -123,15 +129,42 @@ import {
 
 const data = ref({})
 const seatsFirebase = ref([])
-const showTimes = ref([])
+const seats = ref([])
 const minutes = ref()
 const seconds = ref()
 const isLoadingPage = ref(true)
 const currentTime = ref(null)
 const showtimeId = ref(store.getters['showtime/selectedShowtime'])
 const previousPath = (router.options.history.state.back as string) ?? '/'
-const userID = 1 // lấy từ vueX ra
+const userID = ref(store.getters['auth/currentUser'].id)
 const { t } = i18n.global
+
+function chunkArray(array: any, chunkSize: any) {
+    const chunks = {}
+    let key: string
+
+    for (let i = 0, j = 0; i < array.length; i += chunkSize, j++) {
+        key = convertNumberToAlphabet(j)
+        chunks[key] = array
+            .slice(i, i + chunkSize)
+            .sort((a, b) => parseInt(a.name.substring(1), 10) - parseInt(b.name.substring(1), 10))
+    }
+
+    return chunks
+}
+
+const convertNumberToAlphabet = (number: number) => {
+    let key: string
+
+    if (number < 26) {
+        key = String.fromCharCode(65 + number)
+    } else {
+        let character = String.fromCharCode(64 + number / 25)
+        key = `${character}${String.fromCharCode(64 + (number % 25))}`
+    }
+
+    return key
+}
 
 const clear = () => {
     unsubscribe && unsubscribe()
@@ -151,7 +184,7 @@ function setupRealtimeListener() {
 function checkSeat(id) {
     const seatInData = seatsFirebase.value.find((dataSeat) => dataSeat.id == id)
     if (seatInData) {
-        if (seatInData.user_id === userID && !seatInData.status) {
+        if (seatInData.user_id === userID.value && !seatInData.status) {
             return { class: 'bg-yellow-400 hover:bg-yellow-300', disabled: false }
         } else {
             return { class: 'bg-green-500 cursor-not-allowed', disabled: true }
@@ -161,7 +194,9 @@ function checkSeat(id) {
 }
 
 async function toggleSeat(seat) {
-    const seatInData = seatsFirebase.value.find((dataSeat) => dataSeat.id == seat.id && dataSeat.user_id == userID)
+    const seatInData = seatsFirebase.value.find(
+        (dataSeat) => dataSeat.id == seat.id && dataSeat.user_id == userID.value
+    )
     if (seatInData) {
         await remove(seat.id)
     } else {
@@ -192,8 +227,8 @@ async function add(seat) {
         const newSeat = {
             id: seat.id,
             name: seat.name,
-            user_id: userID,
-            showtime_id: 1,
+            user_id: userID.value,
+            showtime_id: showtimeId.value,
             created_at: currentTime.value,
             status: false,
         }
@@ -240,12 +275,13 @@ const handleCountdown = (selectedSeats) => {
 }
 
 const selectedSeats = computed(() => {
-    return seatsFirebase.value.filter((seat) => seat.user_id === userID && seat.status === false)
+    return seatsFirebase.value.filter((seat) => seat.user_id === userID.value && seat.status === false)
 })
 
 const getShowtimeDetail = async () => {
     const response = await showtime.showtimeDetail(showtimeId.value)
     data.value = response.data
+    seats.value = chunkArray(data.value.room.seats, data.value.room.column_number)
 }
 
 onMounted(async () => {
@@ -253,7 +289,7 @@ onMounted(async () => {
     try {
         if (!showtimeId.value) {
             clear()
-            showToast(t('message.error.UNEXPECTED_ERROR'), ToastType.ERROR)
+            showToast(t('message.error.UNEXPECTED_ERROR'), ToastType.WARNING)
             router.push({ path: previousPath, replace: true })
             return
         }
