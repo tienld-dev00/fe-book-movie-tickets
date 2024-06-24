@@ -199,13 +199,6 @@ const handleRegister = async () => {
             password_confirmation: register.password_confirmation,
         })
         showToast("Registration successful", ToastType.SUCCESS)
-
-        // Clear input fields after successful registration
-        // register.name = '';
-        // register.email = '';
-        // register.phone_number = '';
-        // register.password = '';
-        // register.password_confirmation = '';
         router.push({
             path: '/verify-account',
             query: { email: register.email }

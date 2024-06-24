@@ -36,7 +36,7 @@ const authModule: Module<AuthState, RootState> = {
                 
                 return res
             } catch (error) {
-                if (error.code === 401){
+                if (error?.data?.code === 409){
                     router.push({ 
                         name: 'verify_account',
                         query: { email: credentials.email }
