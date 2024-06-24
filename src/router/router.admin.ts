@@ -30,6 +30,11 @@ const homeRouter: Array<RouteRecordRaw> = [
                 name: 'admin-room',
                 component: () => import('@/views/admin/room/index.vue'),
             },
+            {
+                path: 'movie',
+                name: 'admin-movie',
+                component: () => import('@/views/admin/movie/index.vue'),
+            },
         ],
     },
 ]

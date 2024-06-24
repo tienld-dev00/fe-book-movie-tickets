@@ -4,6 +4,7 @@ import { RootState } from '@/store'
 import { AuthState } from '@/types'
 import { getUserProfile, login, logout, register, getGoogleSignInUrl, googleLoginCallback} from '@/api/modules/auth'
 import { UserDetail } from '@/api/modules/auth/types'
+import router from '@/router/index'
 
 const authModule: Module<AuthState, RootState> = {
     namespaced: true,
@@ -32,9 +33,15 @@ const authModule: Module<AuthState, RootState> = {
 
                 commit('setAccessToken', res.access_token)
                 commit('setUserProfile', res.data)
-
+                
                 return res
             } catch (error) {
+                if (error.code === 401){
+                    router.push({ 
+                        name: 'verify_account',
+                        query: { email: credentials.email }
+                     })
+                }
                 return Promise.reject(error)
             }
         },

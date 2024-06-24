@@ -10,7 +10,7 @@
 
                 <div class="flex justify-center border-b">
                     <p class="py-2 text-center focus:outline-none text-lg font-bold">
-                        Account has been verified.<br>Press the button to go to the login page
+                        {{ message }}
                     </p>
                 </div>
                 <router-link to="/auth/login">
@@ -26,7 +26,36 @@
 
     <DefaultFooter />
 </template>
+
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { verifyEmail } from '@/api/modules/auth/index'
 
+const route = useRoute();
+const message = ref('');
 
+const handlesverifyEmail = async () => {
+    const userId = route.query.user_id;
+    const expires = route.query.expired;
+
+    if (userId && expires) {
+        try {
+            const response = await verifyEmail({
+                id: userId,
+                expires: expires,
+            });
+
+            message.value = response.message;
+        } catch (error) {
+            message.value = error.response?.message || 'An error occurred';
+        }
+    } else {
+        message.value = 'Invalid verification link';
+    }
+};
+
+onMounted(() => {
+    handlesverifyEmail();
+});
 </script>
