@@ -1,8 +1,8 @@
 import { Module } from 'vuex'
-
+import { USER_ROLE } from '@/constants/user'
 import { RootState } from '@/store'
 import { AuthState } from '@/types'
-import { getUserProfile, login, logout, register, getGoogleSignInUrl, googleLoginCallback} from '@/api/modules/auth'
+import { getUserProfile, login, logout, register, getGoogleSignInUrl, googleLoginCallback } from '@/api/modules/auth'
 import { UserDetail } from '@/api/modules/auth/types'
 import router from '@/router/index'
 
@@ -11,9 +11,10 @@ const authModule: Module<AuthState, RootState> = {
     state: {
         access_token: null,
         user: null,
+        role: null,
     },
     mutations: {
-        setAccessToken(state, accessToken: string){
+        setAccessToken(state, accessToken: string) {
             state.access_token = accessToken
             localStorage.setItem('access_token', accessToken)
         },
@@ -23,7 +24,12 @@ const authModule: Module<AuthState, RootState> = {
         logout(state) {
             state.access_token = null
             state.user = null
+            state.role = null
             localStorage.removeItem('access_token')
+        },
+
+        setUserRole(state, role) {
+            state.role = role;
         },
     },
     actions: {
@@ -32,27 +38,36 @@ const authModule: Module<AuthState, RootState> = {
                 const res = await login(credentials)
 
                 commit('setAccessToken', res.access_token)
+                commit('setUserRole', res.role)
                 commit('setUserProfile', res.data)
-                
+
+                const userRole = res.role;
+                console.log("🚀 ~ login ~ userRole:", userRole)
+
+                if (userRole === USER_ROLE.ADMIN) {
+                    router.push({ name: 'admin_dashboard' })
+                } else if (userRole === 1) {
+                    router.push({ name: 'home' })
+                } else {
+                    throw new Error("Invalid user role")
+                }
+
                 return res
             } catch (error) {
-                if (error?.data?.code === 409){
-                    router.push({ 
+                if (error?.data?.code === 409) {
+                    router.push({
                         name: 'verify_account',
                         query: { email: credentials.email }
-                     })
+                    })
                 }
                 return Promise.reject(error)
             }
         },
-        async profile({ commit, getters }, payload) {
+        async profile({ commit }) {
             try {
-                if (getters.currentUser && (!payload?.force || payload.force === false)) {
-                    return getters.currentUser
-                }
-
                 const profile: UserDetail = await getUserProfile()
                 commit('setUserProfile', profile)
+                commit('setUserRole', profile.role);
 
                 return profile
             } catch (error) {
@@ -112,6 +127,9 @@ const authModule: Module<AuthState, RootState> = {
         },
         currentUser(state) {
             return state.user
+        },
+        userRole(state) {
+            return state.role
         },
     },
 }

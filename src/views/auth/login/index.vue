@@ -169,15 +169,6 @@ const router = useRouter();
 const handleLogin = async () => {
     try {
         await store.dispatch('auth/login', state)
-        await store.dispatch('auth/profile')
-        const userRole = store.state.auth.user.role
-        if (userRole === 0) {
-            router.push({ name: 'admin_dashboard' })
-        } else if (userRole === 1) {
-            router.push({ name: 'home' })
-        } else {
-            throw new Error("Invalid user role")
-        }
     } catch (error) {
         showToast(Object.values(error)[0], ToastType.WARNING)
         showToast(error.message, ToastType.ERROR)
