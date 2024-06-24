@@ -2,5 +2,10 @@
     "error": {
         "UNEXPECTED_ERROR": "An unexpected error has occurred. Please try again.",
         "MAXIMUM_ORDER" :"Only a maximum of 5 seats can be selected"
+    },
+
+    "warning": {
+        "NO_SEAT": "Please choose your seats",
+        "EXPIRED_TIME": "The time to reserve seats has expired"
     }
 }
