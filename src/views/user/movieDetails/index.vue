@@ -10,7 +10,7 @@
                     <h2 class="text-2xl font-bold uppercase">
                         {{ thisMovie.name }}
                     </h2>
-                    <p class="mt-5 text-lg"><strong>Genre: </strong> {{ thisMovie.category_id }}</p>
+                    <p class="mt-5 text-lg"><strong>Genre: </strong> {{ thisMovie.category_name }}</p>
                     <p class="text-lg">
                         <strong>Opening: </strong>{{ dayjs(thisMovie.release_date).format('DD-MM-YYYY') }}
                     </p>

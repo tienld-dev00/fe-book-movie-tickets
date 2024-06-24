@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-2xl font-bold text-orange-800 uppercase">{{ data.room && data.room.name }}</h2>
             <div class="flex items-center mr-2">
-                <h2 class="text-xl font-bold text-orange-800">Thời gian chọn ghế còn lại:</h2>
+                <h2 class="text-xl font-bold text-orange-800">Time remaining:</h2>
                 <div class="clock rounded border border-red-500 p-1 w-fit ml-2">
                     <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
                         minutes !== undefined ? `${minutes}`.toString().padStart(2, '0') : '00'
@@ -23,7 +23,7 @@
             <div class="lg:w-3/4">
                 <!-- Screen -->
                 <div class="text-center mb-4">
-                    <div class="bg-gray-300 h-10 w-full rounded-t-lg flex items-center justify-center">MÀN HÌNH</div>
+                    <div class="bg-gray-300 h-10 w-full rounded-t-lg flex items-center justify-center">SCREEN</div>
                 </div>
                 <div class="flex flex-col w-full gap-3">
                     <div v-for="(row, key) in seats" :key="key" class="flex items-center gap-4 mx-auto">
@@ -45,28 +45,26 @@
                     {{ data.movie?.name ?? '' }}
                 </p>
                 <h3 class="font-bold">
-                    Giá vé:
+                    Price:
                     <span class="text-yellow-800">{{
                         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.price)
                     }}</span>
                 </h3>
-                <p>Ngày: {{ dayjs(data.start_time).format('DD-MM-YYYY') }}</p>
-                <p>
-                    Thời gian: {{ dayjs(data.start_time).format('HH:mm') }} - {{ dayjs(data.end_time).format('HH:mm') }}
-                </p>
+                <p>Day: {{ dayjs(data.start_time).format('DD-MM-YYYY') }}</p>
+                <p>Time: {{ dayjs(data.start_time).format('HH:mm') }} - {{ dayjs(data.end_time).format('HH:mm') }}</p>
                 <!-- Seat Legend -->
                 <div class="mt-6">
                     <div class="flex items-center mb-2">
                         <div class="w-6 h-6 bg-green-500 mr-2"></div>
-                        <span>Ghế đã đặt</span>
+                        <span>Purchased Seat</span>
                     </div>
                     <div class="flex items-center mb-2">
                         <div class="w-6 h-6 bg-yellow-500 mr-2"></div>
-                        <span>Ghế đang chọn</span>
+                        <span>Selected Seat</span>
                     </div>
                     <div class="flex items-center mb-2">
                         <div class="w-6 h-6 bg-gray-300 mr-2"></div>
-                        <span>Ghế trống</span>
+                        <span>Empty Seat</span>
                     </div>
                 </div>
             </div>
@@ -75,7 +73,7 @@
         <!-- Buttons -->
         <div class="mt-10 flex justify-between">
             <div class="flex">
-                <span>Ghế đã chọn:</span>
+                <span>List of selected seats:</span>
                 <div class="flex gap-2 ml-2">
                     <span
                         class="w-6 h-6 rounded border-slate-500 border"
@@ -87,7 +85,7 @@
             </div>
             <div>
                 <p class="text-yellow-800">
-                    Tổng tiền:
+                    Total:
                     {{
                         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
                             data.price * selectedSeats.length
@@ -95,11 +93,8 @@
                     }}
                 </p>
             </div>
-            <button
-                @click="$router.push({ name: 'checkout' })"
-                class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400"
-            >
-                Tiếp tục
+            <button @click="checkOut" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-400">
+                Continue
             </button>
         </div>
     </div>
@@ -221,7 +216,7 @@ async function add(seat) {
             showToast(t('message.error.MAXIMUM_ORDER'), ToastType.WARNING)
             return
         }
-        if (selectedSeats.value.length > 0 && selectedSeats.value.length < 5) {
+        if (selectedSeats.value.length > 0 && selectedSeats.value.length <= 5) {
             currentTime.value = selectedSeats.value[0].created_at
         }
         const newSeat = {
@@ -253,7 +248,8 @@ let intervalId
 const handleCountdown = (selectedSeats) => {
     intervalId = setInterval(async () => {
         const now = new Date().getTime()
-        if (selectedSeats.value.length > 0 && selectedSeats.value.length < 5) {
+
+        if (selectedSeats.value.length > 0 && selectedSeats.value.length <= 5) {
             currentTime.value = selectedSeats.value[0].created_at
         }
         const fiveMinLater = currentTime.value.toDate().getTime() + 4.5 * 60 * 1000
@@ -268,10 +264,19 @@ const handleCountdown = (selectedSeats) => {
             })
             await Promise.all(deletePromises)
 
-            showToast('Đã hết thời gian đặt ghế.', ToastType.WARNING)
+            showToast(t('message.warning.EXPIRED_TIME'), ToastType.WARNING)
             router.push({ path: previousPath, replace: true })
         }
     }, 1000)
+}
+
+const checkOut = () => {
+    if (selectedSeats.value.length > 0) {
+        router.push({ name: 'checkout' })
+    }
+
+    showToast(t('message.warning.NO_SEAT'), ToastType.WARNING)
+    return
 }
 
 const selectedSeats = computed(() => {
