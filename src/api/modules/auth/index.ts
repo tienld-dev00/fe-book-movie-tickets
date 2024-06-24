@@ -66,6 +66,7 @@ export const googleLoginCallback = async (code: string): Promise<any> => {
     }
 }
 
+
 export const updateProfile = async (data: FormData): Promise<UserDetail> => {
     try {
         const response = await axios.post('/auth/update', data, { headers });
@@ -97,5 +98,22 @@ export const ResetPassword = async (data: ResetPasswordRequest): Promise<void> =
         await axios.post('/auth/resetPassword', data);
     } catch (error) {
         return Promise.reject(error)
+    }
+};
+
+export const resendActivationEmail = async (email: string): Promise<void> => {
+    try {
+        await axios.post('/auth/resend-activation-email', { email });
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const verifyEmail = async (params): Promise<void> => {
+    try {
+        const response = await axios.get('/auth/verify-email', { params });
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
     }
 };

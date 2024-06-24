@@ -30,6 +30,16 @@ const adminRouter: Array<RouteRecordRaw> = [
                 name: 'admin-order',
                 component: () => import('@/views/admin/order/index.vue'),
             },
+            {
+                path: 'room',
+                name: 'admin-room',
+                component: () => import('@/views/admin/room/index.vue'),
+            },
+            {
+                path: 'movie',
+                name: 'admin-movie',
+                component: () => import('@/views/admin/movie/index.vue'),
+            },
         ],
     },
 ]
