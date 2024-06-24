@@ -68,6 +68,7 @@ const authModule: Module<AuthState, RootState> = {
                 const profile: UserDetail = await getUserProfile()
                 commit('setUserProfile', profile)
                 commit('setUserRole', profile.role);
+                console.log("🚀 ~ profile ~ profile.role:", profile.role)
 
                 return profile
             } catch (error) {
