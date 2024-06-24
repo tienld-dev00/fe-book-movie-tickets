@@ -1,8 +1,9 @@
 import axios from '@/api/axios'
-import { DetailUserResponse, ShowtimeParams, ListUserResponse, FormUserData, UserData } from './types'
+import { FormSearchMovie, ListMoviesResponse, FormMovieyData } from './types'
 
-const resource = '/movie'
+const resource = '/movies'
 
 export const movie = {
     movieDetail: (slug: string): Promise<any> => axios.get(`${resource}/${slug}`),
 }
+
