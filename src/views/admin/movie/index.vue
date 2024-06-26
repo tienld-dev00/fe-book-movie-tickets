@@ -183,10 +183,33 @@
             <el-table-column fixed="right" label="Action" width="150" header-align="center" align="center">
                 <template #default="scope">
                     <el-button :icon="View" circle @click="handleShowModalMovieDetail(scope.row.slug)"></el-button>
-                    <el-button type="warning" :icon="Edit" circle></el-button>
-                    <el-button type="danger" :icon="Delete" circle />
+                    <el-button
+                        type="warning"
+                        :icon="Edit"
+                        circle
+                        @click="handleShowModalUpdateMovie(scope.row.id)"
+                    ></el-button>
+
+                    <el-popconfirm
+                        title="Movies will be deleted and screenings will be hidden?"
+                        :width="430"
+                        @confirm="deleteMovie(scope.row.id)"
+                    >
+                        <template #reference>
+                            <el-button type="danger" :icon="Delete" circle />
+                        </template>
+                    </el-popconfirm>
+
                     <div class="mt-2">
-                        <el-button type="success" marginTop="20px"> Show/Hide </el-button>
+                        <el-popconfirm
+                            title="movie and showtime will be hidden. Are you sure?"
+                            :width="430"
+                            @confirm="changeStatus(scope.row.id)"
+                        >
+                            <template #reference>
+                                <el-button type="success" marginTop="20px"> Show/Hide </el-button>
+                            </template>
+                        </el-popconfirm>
                     </div>
                 </template>
             </el-table-column>
@@ -265,8 +288,14 @@
             <div class="flex flex-col gap-3">
                 <Form class="demo-form-inline" @submit="handleSubmitAddMovie">
                     <el-form-item label="Name:">
-                        <Field name="name" :rules="isRequired" v-slot="{ field, meta }">
-                            <el-input v-model="addMovie.name" v-bind="field" placeholder="Input the name" clearable />
+                        <Field name="name" :rules="isRequired" v-slot="{ field, meta, handleChange, handleBlur }">
+                            <el-input
+                                v-model="addMovie.name"
+                                placeholder="Input the name"
+                                clearable
+                                @input="handleChange"
+                                @blur="handleBlur"
+                            />
                             <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
                                 meta.errors[0]
                             }}</span>
@@ -295,15 +324,20 @@
                     </el-form-item>
 
                     <el-form-item label="Release Date:">
-                        <Field name="release_date" :rules="isRequired" v-slot="{ field, meta }">
+                        <Field
+                            name="release_date"
+                            :rules="isRequired"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                        >
                             <el-date-picker
                                 v-model="addMovie.release_date"
-                                v-bind="field"
                                 type="date"
                                 placeholder="Select release day"
                                 class="mr-2"
+                                @change="handleChange"
+                                @blur="handleBlur"
                             />
-                            <span class="text-red-600 text-xs text-xs" v-if="meta.touched && meta.errors.length">{{
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
                                 meta.errors[0]
                             }}</span>
                         </Field>
@@ -324,15 +358,20 @@
                     </div>
 
                     <el-form-item label="Description:">
-                        <Field name="description" :rules="isRequired" v-slot="{ field, meta }">
+                        <Field
+                            name="description"
+                            :rules="isRequired"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                        >
                             <el-input
-                                v-bind="field"
                                 v-model="addMovie.description"
                                 :rows="5"
                                 type="textarea"
                                 placeholder="Please input"
+                                @input="handleChange"
+                                @blur="handleBlur"
                             />
-                            <span class="text-red-600 text-xs text-xs" v-if="meta.touched && meta.errors.length">{{
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
                                 meta.errors[0]
                             }}</span>
                         </Field>
@@ -340,7 +379,22 @@
 
                     <el-form-item label="Poster:">
                         <Field name="poster">
-                            <input type="file" accept="image/*" class="mr-2" @change="handleFileChange($event)" />
+                            <input
+                                name="file"
+                                type="file"
+                                accept="image/*"
+                                class="mr-2"
+                                @change="handleFileChange($event)"
+                                required
+                            />
+                        </Field>
+                    </el-form-item>
+                    <el-form-item>
+                        <Field name="image" v-model="imageName" :rules="isImage" v-slot="{ field, meta }">
+                            <input type="hidden" v-bind="field" />
+                            <span class="text-red-600 text-xs text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
                         </Field>
                     </el-form-item>
                     <img class="w-1/3 mt-2" :src="preUrlImage" alt="" />
@@ -362,6 +416,129 @@
                 </Form>
             </div>
         </el-dialog>
+        <el-dialog v-model="isUpdateMovie" title="Update Movie" width="1000" style="max-height: 90%; overflow-y: auto">
+            <div
+                v-if="isLoadingModal"
+                class="el-loading-mask"
+                style="display: flex; align-items: center; justify-content: center"
+            >
+                <el-icon class="is-loading" color="var(--el-color-primary)" :size="26">
+                    <loading-icon />
+                </el-icon>
+            </div>
+            <div v-else class="flex flex-col gap-3">
+                <Form class="demo-form-inline" @submit="handleSubmitUpdateMovie(addMovie.id)">
+                    <el-form-item label="Name:">
+                        <Field name="name" v-slot="{ meta, handleChange, handleBlur }">
+                            <el-input
+                                v-model="addMovie.name"
+                                placeholder="Input the name"
+                                clearable
+                                @input="handleChange"
+                                @blur="handleBlur"
+                            />
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
+                        </Field>
+                    </el-form-item>
+
+                    <el-form-item label="Category:">
+                        <Field name="category" v-slot="{ field, meta }">
+                            <el-select
+                                v-model="addMovie.category_id"
+                                v-bind="field"
+                                placeholder="Choose the category"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="category in categories"
+                                    :key="category.id"
+                                    :label="category.name"
+                                    :value="category.id"
+                                />
+                            </el-select>
+                            <span class="text-red-600 text-xs text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
+                        </Field>
+                    </el-form-item>
+
+                    <el-form-item label="Release Date:">
+                        <Field name="release_date" v-slot="{ meta, handleChange, handleBlur }">
+                            <el-date-picker
+                                v-model="addMovie.release_date"
+                                type="date"
+                                placeholder="Select release day"
+                                class="mr-2"
+                                @change="handleChange"
+                                @blur="handleBlur"
+                            />
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
+                        </Field>
+                    </el-form-item>
+
+                    <div class="flex justify-between mr-40">
+                        <el-form-item label="Age Limit:">
+                            <Field name="age_limit">
+                                <el-input-number v-model="addMovie.age_limit" :min="0" :max="20" class="mr-2" />
+                            </Field>
+                        </el-form-item>
+
+                        <el-form-item label="Duration:">
+                            <Field name="duration">
+                                <el-input-number v-model="addMovie.duration" :min="1" :max="300" class="mr-2" />
+                            </Field>
+                        </el-form-item>
+                    </div>
+
+                    <el-form-item label="Description:">
+                        <Field name="description" v-slot="{ meta, handleChange, handleBlur }">
+                            <el-input
+                                v-model="addMovie.description"
+                                :rows="5"
+                                type="textarea"
+                                placeholder="Please input"
+                                @input="handleChange"
+                                @blur="handleBlur"
+                            />
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
+                        </Field>
+                    </el-form-item>
+
+                    <el-form-item label="Poster:">
+                        <Field name="poster">
+                            <input type="file" accept="image/*" class="mr-2" @change="handleFileChange($event)" />
+                        </Field>
+                    </el-form-item>
+                    <img class="w-1/3 mt-2" :src="preUrlImage" alt="" />
+                    <el-form-item label="Trailer:">
+                        <Field name="trailer" v-slot="{ meta, handleChange, handleBlur }">
+                            <el-input
+                                v-model="addMovie.trailer"
+                                placeholder="Link of trailer"
+                                @input="handleChange"
+                                @blur="handleBlur"
+                            />
+                            <span class="text-red-600 text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
+                        </Field>
+                    </el-form-item>
+
+                    <button
+                        type="submit"
+                        class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Submit
+                    </button>
+                </Form>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -369,7 +546,7 @@
 import { movie } from '@/api/modules/admin/movie'
 import { category } from '@/api/modules/category'
 import { FormSearchCategory } from '@/api/modules/category/types'
-import { Meta, Order, OrderStatus, PaymentMethod } from '@/api/modules/admin/order/types'
+import { Meta, Order, OrderStatus, PaymentMethod, useField } from '@/api/modules/admin/order/types'
 import { ToastType } from '@/types'
 import { showToast } from '@/utils/toastHelper'
 import {
@@ -384,8 +561,8 @@ import {
 } from '@element-plus/icons-vue'
 import { dayjs } from 'element-plus'
 import { Movie } from '@/api/modules/movie/types'
-import { Field, Form, ErrorMessage } from 'vee-validate'
-import * as yup from 'yup'
+import { Field, Form, ErrorMessage, useForm } from 'vee-validate'
+import { required } from '@vee-validate/rules'
 
 const movies = ref<Array<Movie>>([])
 const categories = ref()
@@ -412,6 +589,7 @@ const isLoadingTable = ref(true)
 const isLoadingModal = ref(false)
 const isShowMovieDetail = ref(false)
 const isCreateMovie = ref(false)
+const isUpdateMovie = ref(false)
 const perPageArray = [5, 10, 15]
 let timeoutId: any = null
 const videoURL = ref(null)
@@ -419,6 +597,7 @@ const formSearch = reactive<FormSearchCategory>({
     valueSearch: '',
 })
 const preUrlImage = ref('')
+const imageName = ref('')
 
 const handleSubmitAddMovie = async () => {
     try {
@@ -437,10 +616,62 @@ const handleSubmitAddMovie = async () => {
     }
 }
 
+const deleteMovie = async (id) => {
+    try {
+        const response = await movie.delete(id)
+        if (response) {
+            showToast('Movie deleted successfully', ToastType.SUCCESS)
+            await getListMovies()
+        }
+    } catch (error) {
+        showToast('Error when deleting this movie', ToastType.ERROR)
+    }
+}
+
+const changeStatus = async (id) => {
+    try {
+        const response = await movie.changeStatus(id)
+        if (response) {
+            showToast('Movie changed successfully', ToastType.SUCCESS)
+            await getListMovies()
+        }
+    } catch (error) {
+        showToast('Error when changing this movie', ToastType.ERROR)
+    }
+}
+
+const handleSubmitUpdateMovie = async (id) => {
+    try {
+        addMovie.value.release_date = dayjs(addMovie.value.release_date).format(
+            'YYYY-MM-DD HH:mm:ss'
+        ) as unknown as Date
+        if (!(addMovie.value.image instanceof File)) {
+            delete addMovie.value.image
+        }
+
+        const formData = new FormData()
+        for (const key in addMovie.value) {
+            formData.append(key, addMovie.value[key])
+        }
+        formData.append('_method', 'PUT')
+
+        const response = await movie.update(formData, id)
+        if (response) {
+            showToast('Movie updated successfully', ToastType.SUCCESS)
+            await getListMovies()
+        }
+    } catch (error) {
+        showToast('Error when updating this movie', ToastType.ERROR)
+    } finally {
+        isUpdateMovie.value = false
+    }
+}
+
 const handleFileChange = (event) => {
     const file = event.target.files[0]
-    addMovie.value.image = file
     preUrlImage.value = URL.createObjectURL(file)
+    imageName.value = file.type
+    addMovie.value.image = file
 }
 
 function isRequired(value) {
@@ -449,6 +680,20 @@ function isRequired(value) {
     }
 
     return 'This is required'
+}
+
+function isImage(value) {
+    if (!value) {
+        return 'Vui lòng chọn một tập tin.'
+    }
+
+    const imageRegex = /^image\//i
+
+    if (!imageRegex.test(value)) {
+        return 'Chỉ cho phép tải lên các tập tin hình ảnh có định dạng .jpg, .jpeg, .png, .gif.'
+    }
+
+    return true
 }
 
 const rowClassName = ({ row }) => {
@@ -482,8 +727,22 @@ const handleShowModalAddMovie = async () => {
         image: '',
         trailer: '',
     }
+    preUrlImage.value = ''
     await getListCategory()
     isCreateMovie.value = true
+}
+
+const handleShowModalUpdateMovie = async (id) => {
+    isUpdateMovie.value = true
+    isLoadingModal.value = true
+
+    const movie = movies.value.find((movie) => movie.id === id)
+    if (movie) {
+        addMovie.value = movie
+        getListCategory()
+        preUrlImage.value = movie.image
+    }
+    isLoadingModal.value = false
 }
 
 const handlePageChange = (newPage) => {
