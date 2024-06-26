@@ -40,7 +40,6 @@ export interface checkForgotPasswordRequest {
 }
 
 export interface ResetPasswordRequest {
-    verification_code: string | undefined
     password: string | undefined
     password_confirmation: string | undefined
 }

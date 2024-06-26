@@ -38,17 +38,19 @@ const message = ref('');
 const handlesverifyEmail = async () => {
     const userId = route.query.user_id;
     const expires = route.query.expired;
+    const signature = route.query.signature;
 
     if (userId && expires) {
         try {
             const response = await verifyEmail({
                 id: userId,
                 expires: expires,
+                signature: signature,
             });
 
             message.value = response.message;
         } catch (error) {
-            message.value = error.response?.message || 'An error occurred';
+            message.value = error.data.message.message || 'An error occurred';
         }
     } else {
         message.value = 'Invalid verification link';
