@@ -1,12 +1,11 @@
 import { Module } from 'vuex'
 import { USER_ROLE } from '@/constants/user'
 import { RootState } from '@/store'
-import { AuthState } from '@/types'
 import { getUserProfile, login, logout, register, getGoogleSignInUrl, googleLoginCallback } from '@/api/modules/auth'
 import { UserDetail } from '@/api/modules/auth/types'
 import router from '@/router/index'
 
-const authModule: Module<AuthState, RootState> = {
+const authModule: Module< RootState> = {
     namespaced: true,
     state: {
         access_token: null,
@@ -42,8 +41,6 @@ const authModule: Module<AuthState, RootState> = {
                 commit('setUserProfile', res.data)
 
                 const userRole = res.role;
-                console.log("🚀 ~ login ~ userRole:", userRole)
-
                 if (userRole === USER_ROLE.ADMIN) {
                     router.push({ name: 'admin_dashboard' })
                 } else if (userRole === 1) {
@@ -68,8 +65,6 @@ const authModule: Module<AuthState, RootState> = {
                 const profile: UserDetail = await getUserProfile()
                 commit('setUserProfile', profile)
                 commit('setUserRole', profile.role);
-                console.log("🚀 ~ profile ~ profile.role:", profile.role)
-
                 return profile
             } catch (error) {
                 return Promise.reject(error)
@@ -88,13 +83,6 @@ const authModule: Module<AuthState, RootState> = {
             try {
                 await logout()
                 commit('logout')
-            } catch (error) {
-                return Promise.reject(error)
-            }
-        },
-        async register({ commit }, credentials) {
-            try {
-                await register(credentials)
             } catch (error) {
                 return Promise.reject(error)
             }

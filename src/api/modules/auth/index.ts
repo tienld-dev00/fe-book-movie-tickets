@@ -93,9 +93,10 @@ export const checkForgotPassword = async (data: checkForgotPasswordRequest): Pro
     }
 };
 
-export const ResetPassword = async (data: ResetPasswordRequest): Promise<void> => {
+export const ResetPassword = async (params: ResetPasswordRequest): Promise<void> => {
     try {
-        await axios.post('/auth/resetPassword', data);
+        const { email, signature, ...rest } = params;
+        await axios.post(`/auth/resetPassword?email=${email}&signature=${signature}`, rest);
     } catch (error) {
         return Promise.reject(error)
     }

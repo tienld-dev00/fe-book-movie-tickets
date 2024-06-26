@@ -9,7 +9,7 @@ export async function checkLogin(
     from: RouteLocationNormalized,
     next: NavigationGuardNext
 ): Promise<void> {
-    const excludedRoutes = ['forgot_password', 'reset_password', 'reset_password_send_mail']
+    const excludedRoutes = ['movieIsShowing', 'upcomingMovie', 'verify_account', 'forgot_password', 'reset_password', 'confirmed_account']
     const router = useRouter()
     const isLoggedIn = store.getters['auth/isLoggedIn']
 

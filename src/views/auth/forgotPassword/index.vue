@@ -24,11 +24,6 @@
                             type="button">
                             Resend the code
                         </button>
-
-                        <router-link :to="{ name: 'reset_password' }" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-                            type="button">
-                            Enter your new password
-                        </router-link>
                     </div>
                 </dir>
             </div>

@@ -40,7 +40,7 @@ const handlesverifyEmail = async () => {
     const expires = route.query.expired;
     const signature = route.query.signature;
 
-    if (userId && expires) {
+    if (userId && expires && signature) {
         try {
             const response = await verifyEmail({
                 id: userId,

@@ -15,10 +15,10 @@
                         class="w-1/2 py-2 text-center focus:outline-none text-lg font-bold">
                         Log in
                     </button>
-                    <button @click="toggleTab('register')"
-                        :class="{ 'border-b-2 border-orange-500': currentTab === 'register' }"
+                    <button @click="toggleTab('registerUser')"
+                        :class="{ 'border-b-2 border-orange-500': currentTab === 'registerUser' }"
                         class="w-1/2 py-2 text-center focus:outline-none text-lg font-bold">
-                        Register
+                        RegisterUser
                     </button>
                 </div>
 
@@ -75,34 +75,34 @@
                     </div>
                 </div>
 
-                <!-- Register -->
-                <div v-if="currentTab === 'register'" class="p-4">
+                <!-- RegisterUser -->
+                <div v-if="currentTab === 'registerUser'" class="p-4">
                     <div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Full name</label>
-                            <input v-model="register.name" id="name" type="text" placeholder="Enter Full Name Here"
+                            <input v-model="registerUser.name" id="name" type="text" placeholder="Enter Full Name Here"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-                            <input v-model="register.email" id="email" type="email" placeholder="Enter Email Here"
+                            <input v-model="registerUser.email" id="email" type="email" placeholder="Enter Email Here"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Phone number</label>
-                            <input v-model="register.phone_number" id="phone" type="text"
+                            <input v-model="registerUser.phone_number" id="phone" type="text"
                                 placeholder="Enter Phone Number Here"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
                             <div class="relative">
-                                <input v-model="register.password" id="password"
-                                    :type="showRegisterPassword ? 'text' : 'password'" placeholder="Enter Password Here"
+                                <input v-model="registerUser.password" id="password"
+                                    :type="showRegisterUserPassword ? 'text' : 'password'" placeholder="Enter Password Here"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                <button @click="showRegisterPassword = !showRegisterPassword"
+                                <button @click="showRegisterUserPassword = !showRegisterUserPassword"
                                     class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
-                                    <i v-if="showRegisterPassword" class="fa-regular fa-eye-slash"></i>
+                                    <i v-if="showRegisterUserPassword" class="fa-regular fa-eye-slash"></i>
                                     <i v-else class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
@@ -111,13 +111,13 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="confirmPassword">Confirm
                                 password</label>
                             <div class="relative">
-                                <input v-model="register.password_confirmation" id="confirmPassword"
-                                    :type="showRegisterConfirmPassword ? 'text' : 'password'"
+                                <input v-model="registerUser.password_confirmation" id="confirmPassword"
+                                    :type="showRegisterUserConfirmPassword ? 'text' : 'password'"
                                     placeholder="Enter the password"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                <button @click="showRegisterConfirmPassword = !showRegisterConfirmPassword"
+                                <button @click="showRegisterUserConfirmPassword = !showRegisterUserConfirmPassword"
                                     class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
-                                    <i v-if="showRegisterConfirmPassword" class="fa-regular fa-eye-slash"></i>
+                                    <i v-if="showRegisterUserConfirmPassword" class="fa-regular fa-eye-slash"></i>
                                     <i v-else class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
@@ -126,10 +126,10 @@
                             <div class="g-recaptcha" data-sitekey="your-site-key"></div>
                         </div>
                         <div class="flex items-center justify-between">
-                            <button @click="handleRegister"
+                            <button @click="handleRegisterUser"
                                 class="bg-colers_button-25 hover:bg-colers_button-50 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="button">
-                                Register
+                                RegisterUser
                             </button>
                         </div>
                     </div>
@@ -145,6 +145,7 @@ import { useRouter } from 'vue-router'
 import { showToast } from '@/utils/toastHelper'
 import { useStore } from 'vuex'
 import { ToastType } from '@/types';
+import { register } from '@/api/modules/auth/index'
 
 
 const state = reactive({
@@ -152,7 +153,7 @@ const state = reactive({
     password: '',
 })
 
-const register = reactive({
+const registerUser = reactive({
     name: '',
     email: '',
     phone_number: '',
@@ -160,8 +161,8 @@ const register = reactive({
     password_confirmation: '',
 })
 const showLoginPassword = ref(false);
-const showRegisterPassword = ref(false);
-const showRegisterConfirmPassword = ref(false);
+const showRegisterUserPassword = ref(false);
+const showRegisterUserConfirmPassword = ref(false);
 const store = useStore()
 const currentTab = ref('login')
 const router = useRouter();
@@ -175,24 +176,18 @@ const handleLogin = async () => {
     }
 }
 
-const handleRegister = async () => {
-    if (register.password !== register.password_confirmation) {
+const handleRegisterUser = async () => {
+    if (registerUser.password !== registerUser.password_confirmation) {
         showToast("Passwords do not match", ToastType.WARNING)
         return
     }
 
     try {
-        await store.dispatch('auth/register', {
-            name: register.name,
-            email: register.email,
-            phone_number: register.phone_number,
-            password: register.password,
-            password_confirmation: register.password_confirmation,
-        })
+        await register(registerUser)
         showToast("Registration successful", ToastType.SUCCESS)
         router.push({
             path: '/verify-account',
-            query: { email: register.email }
+            query: { email: registerUser.email }
         });
     } catch (error: any) {
         showToast(Object.values(error)[0], ToastType.WARNING)
