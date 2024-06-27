@@ -1,4 +1,4 @@
-import { LinksResponse, MetaResponse } from '@/types'
+import { Room } from '../admin/room/types'
 
 export interface ShowtimeParams {
     movie_id: number
@@ -46,7 +46,7 @@ export interface Showtime {
     end_time: Date
     price: number
     movie: Movie
-    room: string
+    room: Room
     created_at: Date
     updated_at: Date
     seats: Seat[]
