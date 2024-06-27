@@ -2,14 +2,16 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import store from '@/store'
 import { UserDetail } from '@/api/modules/auth/types'
 // import { LANGUAGE, USER_ROLE } from '@/constants'
-import { USER_STATUS } from '@/constants'
+import { USER_STATUS, USER_ROLE } from '@/constants'
+import { showToast } from '@/utils/toastHelper'
+import { ToastType } from '@/types'
 
 export async function checkLogin(
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
     next: NavigationGuardNext
 ): Promise<void> {
-    const excludedRoutes = ['forgot_password', 'reset_password', 'reset_password_send_mail']
+    const excludedRoutes = ['movieIsShowing', 'upcomingMovie', 'verify_account', 'forgot_password', 'reset_password', 'confirmed_account']
     const router = useRouter()
     const isLoggedIn = store.getters['auth/isLoggedIn']
 
@@ -23,7 +25,7 @@ export async function checkLogin(
 
         if (auth.status != USER_STATUS.ACTIVE) {
             nextTick(() => {
-                store.dispatch('auth/logout').then(() => router.push({ name: 'company.login' }))
+                store.dispatch('auth/logout').then(() => router.push({ name: 'login' }))
             })
         }
 
@@ -31,10 +33,32 @@ export async function checkLogin(
             return next({ name: 'home' })
         }
 
-        next()
+        const userRole = auth.role;
+
+        // Kiểm tra và chặn truy cập dựa trên vai trò của người dùng
+        if (userRole === USER_ROLE.ADMIN && isAdminRoute(to)) {
+            next()
+        } else if (userRole === USER_ROLE.USER && isUserRoute(to)) {
+            next()
+        } else {
+            next({ name: 'home' })
+            showToast('You have no rights.', ToastType.ERROR)
+        }
     } else {
         if (to.name === 'login') {
             return next()
+        } else {
+            store.dispatch('auth/setRedirectTo', to.fullPath)
+            router.push({ name: 'login' })
         }
+            console.log("🚀 ~ to.fullPath:", to.fullPath)
     }
+}
+
+function isAdminRoute(route: RouteLocationNormalized): boolean {
+    return route.matched.some(record => record.meta && record.meta.isAdmin)
+}
+
+function isUserRoute(route: RouteLocationNormalized): boolean {
+    return route.matched.some(record => record.meta && record.meta.isUser)
 }

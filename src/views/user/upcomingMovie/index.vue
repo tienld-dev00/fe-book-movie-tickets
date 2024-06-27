@@ -1,7 +1,7 @@
 <template>
     <div class="ml-3 mr-3">
         <div class="mt-7 mb-7 md:mt-10 md:mb-10">
-            <span class="text-2xl font-bold">MOVIE IS SHOWING</span>
+            <span class="text-2xl font-bold">MOVIE COMING SOON</span>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
             <!-- Card 1 -->

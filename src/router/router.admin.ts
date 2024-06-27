@@ -8,6 +8,7 @@ const adminRouter: Array<RouteRecordRaw> = [
         component: () => import('@/layout/adminLayout.vue'),
         meta: {
             middleware: [checkLogin],
+            isAdmin: true,
         },
         children: [
             {
@@ -40,6 +41,11 @@ const adminRouter: Array<RouteRecordRaw> = [
                 name: 'admin-movie',
                 component: () => import('@/views/admin/movie/index.vue'),
             },
+            {
+                path: 'profile',
+                name: 'admin_profile',
+                component: () => import('@/views/admin/Profile/index.vue')
+            }
         ],
     },
 ]

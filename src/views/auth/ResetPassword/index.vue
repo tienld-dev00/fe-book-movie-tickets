@@ -12,12 +12,7 @@
                         Reset Password
                     </p>
                 </div>
-                <dir class="p-4">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">Code</label>
-                        <input v-model="resetPassword.verification_code" type="text" placeholder="Enter code Here"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
+                <div class="p-4">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">New Password</label>
                         <div class="relative">
@@ -56,24 +51,24 @@
                         <router-link :to="{ name: 'login' }"
                             class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                             type="button">
-                            Enter your new password
+                            Login
                         </router-link>
                     </div>
-                </dir>
+                </div>
             </div>
         </div>
     </div>
 
     <DefaultFooter />
 </template>
+
 <script setup lang="ts">
 import { ResetPassword } from '@/api/modules/auth/index'
 import { ToastType } from '@/types';
 import { showToast } from '@/utils/toastHelper';
+import { useRouter } from 'vue-router';
 
-// Tạo state để giữ email
 const resetPassword = reactive({
-    verification_code: '',
     password: '',
     password_confirmation: ''
 })
@@ -81,17 +76,36 @@ const resetPassword = reactive({
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-// Hàm xử lý sự kiện click của nút "Send code"
+const router = useRouter();
+
 const handleResetPassword = async () => {
     try {
-        await ResetPassword(resetPassword)
-        showToast("Password changed successfully.", ToastType.SUCCESS)
-        resetPassword.verification_code = '';
+        const { query } = router.currentRoute.value;
+
+        // Lấy thông tin từ route
+        const email = query.email;
+        const signature = query.signature;
+
+        // Tạo object params để gửi đi
+        const params = {
+            email: email,
+            signature: signature,
+            password: resetPassword.password,
+            password_confirmation: resetPassword.password_confirmation
+        };
+        console.log("🚀 ~ handleResetPassword ~ params:", params)
+
+        // Gọi API ResetPassword với params
+        await ResetPassword(params);
+
+        showToast("Password changed successfully.", ToastType.SUCCESS);
+
+        // Xóa dữ liệu mật khẩu trong form
         resetPassword.password = '';
         resetPassword.password_confirmation = '';
     } catch (error: any) {
-        showToast(Object.values(error)[0], ToastType.WARNING)
-        showToast(error.message, ToastType.ERROR)
+        showToast(Object.values(error)[0], ToastType.WARNING);
+        showToast(error.message.message, ToastType.ERROR);
     }
-}
+};
 </script>
