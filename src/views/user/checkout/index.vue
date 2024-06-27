@@ -7,9 +7,9 @@
         class="container flex flex-col items-center gap-3 px-10 py-6 mx-auto my-6 shadow-2xl lg:px-16 min-h-fit rounded-3xl"
     >
         <div class="flex items-center justify-between w-full py-3 border-b">
-            <el-button type="primary" link :icon="ArrowLeft" @click="router.back()">Trở về</el-button>
+            <el-button type="primary" link :icon="ArrowLeft" @click="router.back()">Back</el-button>
             <p class="text-base font-medium">
-                Giao dịch hết hạn sau:
+                Trade expires after:
                 <span class="inline-flex justify-center w-8 p-1 text-white bg-black rounded-md">{{
                     `${minutes}`.toString().padStart(2, '0')
                 }}</span>
@@ -21,22 +21,22 @@
         </div>
         <div class="flex flex-col w-full gap-6 md:flex-row">
             <div class="flex flex-col flex-1 gap-2 p-6 h-fit rounded-2xl bg-gray-25">
-                <h3 class="text-2xl">Thông tin đơn hàng</h3>
+                <h3 class="text-2xl">Order Detail</h3>
                 <hr />
                 <!-- <span>Mã đơn: {{ orderId }}</span> -->
-                <h4 class="text-base font-semibold">Đặt vé phim {{ showtimeData.movie?.name }}</h4>
+                <h4 class="text-base font-semibold">Book movie {{ showtimeData.movie?.name }}</h4>
                 <span class="text-sm font-normal">
-                    Bắt đầu ngày {{ showtimeData.start_time }} tại {{ showtimeData.room }}
+                    Start at {{ showtimeData.start_time }} in {{ showtimeData.room?.name }}
                 </span>
                 <hr />
-                <span>Ghế đã chọn</span>
+                <span>Selected seats</span>
                 <div class="flex justify-between text-sm font-normal" v-for="item in seats" :key="item.id">
-                    <span> Ghế {{ item.name }}</span>
+                    <span> Seat {{ item.name }}</span>
                     <span class="font-bold">${{ showtimeData.price }}</span>
                 </div>
                 <hr />
                 <div class="flex items-center justify-between">
-                    <span>Tổng cộng</span>
+                    <span>Total</span>
                     <span class="text-lg font-bold text-blue-400">${{ showtimeData.price * seats.length }}</span>
                 </div>
             </div>
@@ -82,16 +82,6 @@ const seats = ref<
 
 const showtimeData = reactive({}) as Showtime
 
-const movie = reactive({
-    id: 1,
-    name: 'DORAEMON - NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU ( LỒNG TIẾNG) (P)',
-})
-
-const room = reactive({
-    id: 1,
-    name: 'Room 1',
-})
-
 const router = useRouter()
 const errorMessage = ref('')
 const isPaymentInProgress = ref(false)
@@ -132,7 +122,7 @@ const handleCountdown = (docs) => {
             }
             clear()
             deleteAllSeatInFirestore(docs)
-            showToast('Đã hết thời gian giao dịch.', ToastType.WARNING)
+            showToast('Transaction time has expired.', ToastType.WARNING)
             router.push({ path: previousPath, replace: true })
         }
     }, 1000)
@@ -179,7 +169,7 @@ onMounted(async () => {
         const tasksCollection = collection(fireStore, 'seats')
         const seatsSelectedQuery = query(
             tasksCollection,
-            where('user_id', '==', 1),
+            where('user_id', '==', store.getters['auth/currentUser'].id),
             where('showtime_id', '==', showtimeId),
             where('status', '==', false)
         )
@@ -190,7 +180,7 @@ onMounted(async () => {
 
                 /** Handle if no seat is selected */
                 if (snapshot.empty) {
-                    showToast('Vui lòng chọn ghế trước khi thanh toán.', ToastType.WARNING)
+                    showToast('Please select your seat before payment.', ToastType.WARNING)
                     router.push({ path: previousPath, replace: true })
 
                     return
@@ -242,8 +232,11 @@ onMounted(async () => {
                 } catch (error) {
                     /** Error when create payment intent failed */
                     clear()
-                    showToast('Đã xảy ra lỗi khi tạo giao dịch thanh toán. Vui lòng thử lại sau!', ToastType.ERROR)
-                    console.log(error)
+                    showToast(
+                        'An error occurred while creating the payment transaction. Please try again later!',
+                        ToastType.ERROR
+                    )
+                    console.log('🚀 ~ unsubscribe=onSnapshot ~ error:', error)
                     router.push({ path: previousPath, replace: true })
                 }
             } else {
@@ -251,7 +244,7 @@ onMounted(async () => {
                 if (seconds.value > 0 && minutes.value > 0) {
                     clear()
                     showToast(
-                        'Ghế đã chọn hết thời gian giữ chỗ hoặc đã được cập nhật. Vui lòng chọn lại ghế!',
+                        'The selected seat has expired or has been updated. Please reselect your seat!',
                         ToastType.WARNING
                     )
                     router.push({ path: previousPath, replace: true })
@@ -260,7 +253,8 @@ onMounted(async () => {
         })
     } catch (error) {
         clear()
-        showToast('Đã xảy ra lỗi khi tạo thanh toán cho đơn hàng của bạn. Vui lòng thử lại sau!', ToastType.ERROR)
+        showToast('An error occurred while creating payment for your order. Please try again later!', ToastType.ERROR)
+        console.log('🚀 ~ onMounted ~ error:', error)
         router.push({ path: previousPath, replace: true })
     }
 })
