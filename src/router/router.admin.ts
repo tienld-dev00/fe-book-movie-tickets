@@ -40,6 +40,11 @@ const adminRouter: Array<RouteRecordRaw> = [
                 name: 'admin-movie',
                 component: () => import('@/views/admin/movie/index.vue'),
             },
+            {
+                path: 'showtime',
+                name: 'admin-showtime',
+                component: () => import('@/views/admin/showtime/index.vue'),
+            },
         ],
     },
 ]
