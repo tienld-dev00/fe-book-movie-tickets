@@ -1,30 +1,26 @@
-<!-- <template>Payment {{ route.query.redirect_status }}</template> -->
 <template>
     <el-result
         v-if="paymentStatus"
         icon="success"
-        title="Thanh toán thành công"
+        title="Payment Successful"
         sub-title="
-Đơn hàng của bạn đã được đặt. Chúng tôi sẽ gửi cho bạn một
-email với chi tiết đơn đặt hàng của bạn."
+Your order has been placed. We will send you an email with your order details."
     >
         <template #extra>
             <el-button type="primary" @click="$router.push({ name: 'home', replace: true })">
-                Trở về trang chủ
+                Return to Home Page
             </el-button>
         </template>
     </el-result>
     <el-result
         v-else
         icon="error"
-        title="Thanh toán thất bại"
-        sub-title="Rất tiếc, đã xảy ra lỗi khi xử lý khoản thanh
-toán của bạn. Vui lòng thử lại bằng phương thức
-thanh toán khác."
+        title="Payment Failed"
+        sub-title="Sorry, there was an error processing your payment. Please try again using a different payment method."
     >
         <template #extra>
             <el-button type="primary" @click="$router.push({ name: 'home', replace: true })">
-                Trở về trang chủ
+                Return to Home Page
             </el-button>
         </template>
     </el-result>
