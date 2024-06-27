@@ -182,7 +182,7 @@ const openModal = async () => {
         selectedDate.value = showDate.value[0].date
         await getShowtimeByDate(showDate.value[0].date)
     } else {
-        showToast('Hiện chưa có suất chiếu cho phim này', ToastType.WARNING)
+        showToast('There are currently no screenings for this movie', ToastType.WARNING)
     }
 }
 const getShowtimeByDate = async (date: string) => {
