@@ -170,6 +170,11 @@ const router = useRouter();
 const handleLogin = async () => {
     try {
         await store.dispatch('auth/login', state)
+        const redirectTo = store.state.auth.redirectTo
+        if (redirectTo) {
+            store.dispatch('auth/clearRedirectTo')
+            router.push(redirectTo)
+        }
     } catch (error) {
         showToast(Object.values(error)[0], ToastType.WARNING)
         showToast(error.message, ToastType.ERROR)

@@ -2,7 +2,7 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import store from '@/store'
 import { UserDetail } from '@/api/modules/auth/types'
 // import { LANGUAGE, USER_ROLE } from '@/constants'
-import { USER_STATUS } from '@/constants'
+import { USER_STATUS, USER_ROLE } from '@/constants'
 
 export async function checkLogin(
     to: RouteLocationNormalized,
@@ -23,7 +23,7 @@ export async function checkLogin(
 
         if (auth.status != USER_STATUS.ACTIVE) {
             nextTick(() => {
-                store.dispatch('auth/logout').then(() => router.push({ name: 'company.login' }))
+                store.dispatch('auth/logout').then(() => router.push({ name: 'login' }))
             })
         }
 
@@ -31,10 +31,31 @@ export async function checkLogin(
             return next({ name: 'home' })
         }
 
-        next()
+        const userRole = auth.role;
+
+        // Kiểm tra và chặn truy cập dựa trên vai trò của người dùng
+        if (userRole === USER_ROLE.ADMIN && isAdminRoute(to)) {
+            next()
+        } else if (userRole === USER_ROLE.USER && isUserRoute(to)) {
+            next()
+        } else {
+            next({ name: 'page_error' })
+        }
     } else {
         if (to.name === 'login') {
             return next()
+        } else {
+            store.dispatch('auth/setRedirectTo', to.fullPath)
+            router.push({ name: 'login' })
         }
+            console.log("🚀 ~ to.fullPath:", to.fullPath)
     }
+}
+
+function isAdminRoute(route: RouteLocationNormalized): boolean {
+    return route.matched.some(record => record.meta && record.meta.isAdmin)
+}
+
+function isUserRoute(route: RouteLocationNormalized): boolean {
+    return route.matched.some(record => record.meta && record.meta.isUser)
 }

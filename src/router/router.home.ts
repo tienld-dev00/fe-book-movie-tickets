@@ -30,6 +30,7 @@ const homeRouter: Array<RouteRecordRaw> = [
                 component: () => import('@/views/user/booking/index.vue'),
                 meta: {
                     middleware: [checkLogin],
+                    isUser: true,
                 },
             },
             {
@@ -38,6 +39,7 @@ const homeRouter: Array<RouteRecordRaw> = [
                 component: () => import('@/views/user/profile/index.vue'),
                 meta: {
                     middleware: [checkLogin],
+                    isUser: true,
                 },
             },
             {
@@ -46,6 +48,7 @@ const homeRouter: Array<RouteRecordRaw> = [
                 component: () => import('@/views/user/changePassword/index.vue'),
                 meta: {
                     middleware: [checkLogin],
+                    isUser: true,
                 },
             },
             {
@@ -54,6 +57,7 @@ const homeRouter: Array<RouteRecordRaw> = [
                 component: () => import('@/views/user/transactionHistory/index.vue'),
                 meta: {
                     middleware: [checkLogin],
+                    isUser: true,
                 },
             },
         ],

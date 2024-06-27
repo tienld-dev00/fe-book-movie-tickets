@@ -6,6 +6,9 @@
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
+                    <router-link to="/admin/profile">
+                        <el-dropdown-item>My profile</el-dropdown-item>
+                    </router-link>
                     <el-dropdown-item @click="handleLogout">Log out </el-dropdown-item>
                 </el-dropdown-menu>
             </template>

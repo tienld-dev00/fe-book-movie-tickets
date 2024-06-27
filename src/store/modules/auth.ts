@@ -5,12 +5,13 @@ import { getUserProfile, login, logout, register, getGoogleSignInUrl, googleLogi
 import { UserDetail } from '@/api/modules/auth/types'
 import router from '@/router/index'
 
-const authModule: Module< RootState> = {
+const authModule: Module<RootState> = {
     namespaced: true,
     state: {
         access_token: null,
         user: null,
         role: null,
+        redirectTo: null,
     },
     mutations: {
         setAccessToken(state, accessToken: string) {
@@ -24,11 +25,15 @@ const authModule: Module< RootState> = {
             state.access_token = null
             state.user = null
             state.role = null
+            state.redirectTo = null
             localStorage.removeItem('access_token')
         },
 
-        setUserRole(state, role) {
-            state.role = role;
+        setRedirectTo(state, redirectTo) {
+            state.redirectTo = redirectTo; 
+        },
+        clearRedirectTo(state) {
+            state.redirectTo = null; 
         },
     },
     actions: {
@@ -41,6 +46,7 @@ const authModule: Module< RootState> = {
                 commit('setUserProfile', res.data)
 
                 const userRole = res.role;
+                console.log("🚀 ~ login ~ userRole:", userRole)
                 if (userRole === USER_ROLE.ADMIN) {
                     router.push({ name: 'admin_dashboard' })
                 } else if (userRole === 1) {
@@ -106,6 +112,13 @@ const authModule: Module< RootState> = {
                 return Promise.reject(error);
             }
         },
+
+        setRedirectTo({ commit }, redirectTo) {
+            commit('setRedirectTo', redirectTo); // Add this action
+        },
+        clearRedirectTo({ commit }) {
+            commit('clearRedirectTo'); // Add this action
+        },
     },
     getters: {
         isLoggedIn(state) {
@@ -119,6 +132,9 @@ const authModule: Module< RootState> = {
         },
         userRole(state) {
             return state.role
+        },
+        redirectTo(state) {
+            return state.redirectTo; // Add this getter
         },
     },
 }
