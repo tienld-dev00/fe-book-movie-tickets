@@ -380,12 +380,12 @@
                     <el-form-item label="Poster:">
                         <Field name="poster">
                             <input
+                                ref="inputFile"
                                 name="file"
                                 type="file"
                                 accept="image/*"
                                 class="mr-2"
                                 @change="handleFileChange($event)"
-                                required
                             />
                         </Field>
                     </el-form-item>
@@ -429,11 +429,16 @@
             <div v-else class="flex flex-col gap-3">
                 <Form class="demo-form-inline" @submit="handleSubmitUpdateMovie(addMovie.id)">
                     <el-form-item label="Name:">
-                        <Field name="name" v-slot="{ meta, handleChange, handleBlur }">
+                        <Field
+                            name="name"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                            v-model="addMovie.name"
+                            :rules="isRequired"
+                        >
                             <el-input
+                                v-bind="field"
                                 v-model="addMovie.name"
                                 placeholder="Input the name"
-                                clearable
                                 @input="handleChange"
                                 @blur="handleBlur"
                             />
@@ -465,8 +470,14 @@
                     </el-form-item>
 
                     <el-form-item label="Release Date:">
-                        <Field name="release_date" v-slot="{ meta, handleChange, handleBlur }">
+                        <Field
+                            name="release_date"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                            v-model="addMovie.release_date"
+                            :rules="isRequired"
+                        >
                             <el-date-picker
+                                v-bind="field"
                                 v-model="addMovie.release_date"
                                 type="date"
                                 placeholder="Select release day"
@@ -495,8 +506,14 @@
                     </div>
 
                     <el-form-item label="Description:">
-                        <Field name="description" v-slot="{ meta, handleChange, handleBlur }">
+                        <Field
+                            name="description"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                            v-model="addMovie.description"
+                            :rules="isRequired"
+                        >
                             <el-input
+                                v-bind="field"
                                 v-model="addMovie.description"
                                 :rows="5"
                                 type="textarea"
@@ -512,15 +529,36 @@
 
                     <el-form-item label="Poster:">
                         <Field name="poster">
-                            <input type="file" accept="image/*" class="mr-2" @change="handleFileChange($event)" />
+                            <input
+                                ref="inputFile"
+                                name="file"
+                                type="file"
+                                accept="image/*"
+                                class="mr-2"
+                                @change="handleFileChange($event)"
+                            />
+                        </Field>
+                    </el-form-item>
+                    <el-form-item>
+                        <Field name="image" v-model="imageName" :rules="isImage" v-slot="{ field, meta }">
+                            <input type="hidden" v-bind="field" />
+                            <span class="text-red-600 text-xs text-xs" v-if="meta.touched && meta.errors.length">{{
+                                meta.errors[0]
+                            }}</span>
                         </Field>
                     </el-form-item>
                     <img class="w-1/3 mt-2" :src="preUrlImage" alt="" />
                     <el-form-item label="Trailer:">
-                        <Field name="trailer" v-slot="{ meta, handleChange, handleBlur }">
+                        <Field
+                            name="trailer"
+                            v-slot="{ field, meta, handleChange, handleBlur }"
+                            :rules="isRequired"
+                            v-model="addMovie.trailer"
+                        >
                             <el-input
-                                v-model="addMovie.trailer"
+                                v-bind="field"
                                 placeholder="Link of trailer"
+                                v-model="addMovie.trailer"
                                 @input="handleChange"
                                 @blur="handleBlur"
                             />
@@ -593,6 +631,8 @@ const isUpdateMovie = ref(false)
 const perPageArray = [5, 10, 15]
 let timeoutId: any = null
 const videoURL = ref(null)
+const inputFile = ref()
+
 const formSearch = reactive<FormSearchCategory>({
     valueSearch: '',
 })
@@ -684,13 +724,13 @@ function isRequired(value) {
 
 function isImage(value) {
     if (!value) {
-        return 'Vui lòng chọn một tập tin.'
+        return 'Please select 1 file'
     }
 
     const imageRegex = /^image\//i
 
     if (!imageRegex.test(value)) {
-        return 'Chỉ cho phép tải lên các tập tin hình ảnh có định dạng .jpg, .jpeg, .png, .gif.'
+        return 'Only image file uploads are allowed'
     }
 
     return true
@@ -727,21 +767,44 @@ const handleShowModalAddMovie = async () => {
         image: '',
         trailer: '',
     }
+
+    imageName.value = ''
     preUrlImage.value = ''
     await getListCategory()
+    await nextTick(() => {
+        if (inputFile.value) {
+            inputFile.value.value = ''
+        }
+    })
     isCreateMovie.value = true
 }
 
 const handleShowModalUpdateMovie = async (id) => {
     isUpdateMovie.value = true
     isLoadingModal.value = true
+    addMovie.value = {
+        name: '',
+        release_date: null,
+        category_id: null,
+        age_limit: 0,
+        description: '',
+        duration: 1,
+        image: '',
+        trailer: '',
+    }
 
     const movie = movies.value.find((movie) => movie.id === id)
     if (movie) {
         addMovie.value = movie
         getListCategory()
         preUrlImage.value = movie.image
+        preUrlImage.value ? (imageName.value = 'image/png') : (imageName.value = '')
     }
+    await nextTick(() => {
+        if (inputFile.value) {
+            inputFile.value.value = ''
+        }
+    })
     isLoadingModal.value = false
 }
 

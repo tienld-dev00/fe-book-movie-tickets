@@ -271,12 +271,12 @@ const handleCountdown = (selectedSeats) => {
 }
 
 const checkOut = () => {
-    if (selectedSeats.value.length > 0) {
-        router.push({ name: 'checkout' })
+    console.log(selectedSeats.value.length)
+    if (selectedSeats.value.length == 0) {
+        showToast(t('message.warning.NO_SEAT'), ToastType.WARNING)
+        return
     }
-
-    showToast(t('message.warning.NO_SEAT'), ToastType.WARNING)
-    return
+    router.push({ name: 'checkout' })
 }
 
 const selectedSeats = computed(() => {
@@ -294,8 +294,7 @@ onMounted(async () => {
     try {
         if (!showtimeId.value) {
             clear()
-            showToast(t('message.error.UNEXPECTED_ERROR'), ToastType.WARNING)
-            router.push({ path: previousPath, replace: true })
+            router.push({ name: 'home', replace: true })
             return
         }
         await getShowtimeDetail()
