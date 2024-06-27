@@ -8,7 +8,7 @@
                 <div class="flex flex-col mt-5 md:mt-0">
                     <span class="bg-colers_text-700 py-3 text-center text-white">ACCOUNT INFORMATION</span>
                 </div>
-                <form class="ml-5 mr-5" @submit.prevent="updateUserProfile">
+                <Form :validation-schema="validationSchema" @submit="updateUserProfile" class="ml-5 mr-5">
                     <div class="md:mt-4 mb-4 text-center">
                         <div class="relative inline-block">
                             <img :src="avatarUrl" alt="Avatar" class="w-32 h-32 rounded-full object-cover">
@@ -27,21 +27,24 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Full name</label>
-                        <input v-model="userData.name" type="text" class="w-full mt-2 p-2 border rounded">
+                        <Field name="name" v-model="userData.name" type="text" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="name" class="text-red-500" />
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Email</label>
-                        <input disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded">
+                        <Field name="email" disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="email" class="text-red-500" />
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Phone Number</label>
-                        <input v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded">
+                        <Field name="phone_number" v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="phone_number" class="text-red-500" />
                     </div>
                     <div class="text-center mt-5 mb-3">
                         <button type="submit"
                             class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
     </div>
@@ -53,6 +56,8 @@ import { useRoute } from 'vue-router';
 import DefaultHeaderProfile from '@/components/organisms/DefaultHeaderProfile.vue';
 import { showToast } from '@/utils/toastHelper';
 import { ToastType } from '@/types';
+import { Field, Form, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 
 const route = useRoute();
 const userData = reactive({
@@ -61,6 +66,12 @@ const userData = reactive({
     avatar: '',
     phone_number: ''
 });
+
+const validationSchema = yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    phone_number: yup.string().required().min(9).max(11),
+})
 
 const avatarFile = ref<File | null>(null);
 
@@ -78,12 +89,12 @@ const handleAvatarChange = (event: Event) => {
     }
 };
 
-const updateUserProfile = async () => {
+const updateUserProfile = async (values) => {
     try {
         const formData = new FormData();
-        formData.append('name', userData.name);
-        formData.append('email', userData.email);
-        formData.append('phone_number', userData.phone_number);
+        formData.append('name', values.name);
+        formData.append('email', values.email);
+        formData.append('phone_number', values.phone_number);
         if (avatarFile.value) {
             formData.append('avatar', avatarFile.value);
         }
