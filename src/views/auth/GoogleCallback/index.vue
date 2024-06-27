@@ -44,7 +44,7 @@ const handleGoogleCallback = async () => {
 
         loading.value = false;
     } catch (error: any) {
-        showToast(error.message, ToastType.ERROR);
+        showToast(error.data.message.message, ToastType.ERROR);
         router.push({ name: 'login' });
     }
 };

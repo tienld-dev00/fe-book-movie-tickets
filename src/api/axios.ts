@@ -16,6 +16,8 @@ import {
     HTTP_TOO_MANY_REQUESTS,
     HTTP_SERVER_ERROR,
     HTTP_FORBIDDEN,
+    HTTP_CONFLICT
+    
 } from '@/constants'
 import { ResponseError, ToastType } from '@/types'
 import { showToast } from '@/utils/toastHelper'
@@ -89,6 +91,10 @@ instance.interceptors.response.use(
                 }
 
                 return Promise.reject(errorData)
+            
+            // conflict
+            case HTTP_CONFLICT:
+                return Promise.reject(errorResponse)
             default:
 
                 return

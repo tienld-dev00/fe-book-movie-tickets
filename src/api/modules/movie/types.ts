@@ -17,6 +17,7 @@ export interface Movie {
     name: string
     release_date: Date | null
     category_name: string
+    category_id: number
     age_limit: number
     duration: number
     description: string

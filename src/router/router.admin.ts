@@ -8,6 +8,7 @@ const adminRouter: Array<RouteRecordRaw> = [
         component: () => import('@/layout/adminLayout.vue'),
         meta: {
             middleware: [checkLogin],
+            isAdmin: true,
         },
         children: [
             {
@@ -44,6 +45,11 @@ const adminRouter: Array<RouteRecordRaw> = [
                 path: 'showtime',
                 name: 'admin-showtime',
                 component: () => import('@/views/admin/showtime/index.vue'),
+            },
+            {
+                path: 'profile',
+                name: 'admin_profile',
+                component: () => import('@/views/admin/Profile/index.vue'),
             },
         ],
     },
