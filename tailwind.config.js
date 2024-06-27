@@ -2,6 +2,15 @@
 export default {
   content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
+    container: {
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+        lg: '4rem',
+        xl: '5rem',
+        '2xl': '6rem',
+      },
+    },
     extend: {
       fontSize: {
         'headline-l': ['2rem', '40px'], //32px, 40px
@@ -12,6 +21,26 @@ export default {
         'body-xs': ['0.875rem', '18px'], //14px, 16px
       },
       colors: {
+        colors_header: {
+          menu: {
+            25: '#0f1d2f',
+            50: '#031327',
+            75: '#f1eee9'
+          }
+        },
+        colors_footer: {
+          menu: {
+            25: '#0f1d2f',
+            50: '#031327'
+          }
+        },
+        colers_text: {
+          600: '#ff5400',
+        },
+        colers_button: {
+          25: '#030712',
+          50: '#2563EB'
+        },
         current: 'currentcolor',
         'main-color': '#000000',
         main: {
