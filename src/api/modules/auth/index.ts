@@ -1,11 +1,12 @@
 import axios from '@/api/axios'
-import { LoginRequest, 
-    LoginResponse, 
-    UserDetail, 
-    RegisterRequest, 
-    ChangePasswordRequest, 
-    checkForgotPasswordRequest, 
-    ResetPasswordRequest 
+import {
+    LoginRequest,
+    LoginResponse,
+    UserDetail,
+    RegisterRequest,
+    ChangePasswordRequest,
+    checkForgotPasswordRequest,
+    ResetPasswordRequest
 } from './types'
 
 const headers = {
@@ -30,7 +31,7 @@ export const getUserProfile = async (): Promise<UserDetail> => {
     }
 }
 
-export const logout = async () : Promise<void> => {
+export const logout = async (): Promise<void> => {
     try {
         await axios.post('/auth/logout')
     } catch (error) {
@@ -61,7 +62,6 @@ export const googleLoginCallback = async (code: string): Promise<any> => {
         const response = await axios.get(`/google/callback?code=${code}`);
         return response.data;
     } catch (error) {
-        console.error('Error during Google login callback:', error);
         return Promise.reject(error);
     }
 }

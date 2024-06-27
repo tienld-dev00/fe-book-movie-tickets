@@ -1,7 +1,8 @@
 <template>
-    <!-- Your existing template -->
     <div class="bg-colors_header-menu-25">
-        <!-- Header section -->
+        <div class="md:container mx-auto">
+            <DefaultHeader />
+        </div>
     </div>
     <div class="md:container mx-auto mt-7">
         <div class="flex flex-col items-center justify-center">

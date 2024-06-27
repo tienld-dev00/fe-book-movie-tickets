@@ -3,6 +3,8 @@ import store from '@/store'
 import { UserDetail } from '@/api/modules/auth/types'
 // import { LANGUAGE, USER_ROLE } from '@/constants'
 import { USER_STATUS, USER_ROLE } from '@/constants'
+import { showToast } from '@/utils/toastHelper'
+import { ToastType } from '@/types'
 
 export async function checkLogin(
     to: RouteLocationNormalized,
@@ -39,7 +41,8 @@ export async function checkLogin(
         } else if (userRole === USER_ROLE.USER && isUserRoute(to)) {
             next()
         } else {
-            next({ name: 'page_error' })
+            next({ name: 'home' })
+            showToast('You have no rights.', ToastType.ERROR)
         }
     } else {
         if (to.name === 'login') {

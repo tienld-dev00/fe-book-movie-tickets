@@ -108,7 +108,6 @@ const authModule: Module<RootState> = {
                 await this.dispatch('auth/setProfile');
                 return response;
             } catch (error) {
-                console.error('Error during Google login callback:', error);
                 return Promise.reject(error);
             }
         },

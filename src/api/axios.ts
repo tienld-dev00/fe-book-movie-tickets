@@ -94,9 +94,7 @@ instance.interceptors.response.use(
             
             // conflict
             case HTTP_CONFLICT:
-                console.log("🚀 ~ Promise:", errorResponse)
                 return Promise.reject(errorResponse)
-            
             default:
 
                 return
