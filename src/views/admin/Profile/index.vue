@@ -17,7 +17,7 @@
                 <div class="flex flex-col mt-5 md:mt-0">
                     <span class="bg-colers_text-700 py-3 text-center text-white">ACCOUNT INFORMATION</span>
                 </div>
-                <form class="ml-5 mr-5" @submit.prevent="updateUserProfile">
+                <Form :validation-schema="validationProfile" @submit="updateUserProfile" class="ml-5 mr-5">
                     <div class="md:mt-4 mb-4 text-center">
                         <div class="relative inline-block">
                             <img :src="avatarUrl" alt="Avatar" class="w-32 h-32 rounded-full object-cover">
@@ -36,21 +36,24 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Full name</label>
-                        <input v-model="userData.name" type="text" class="w-full mt-2 p-2 border rounded">
+                        <Field name="name" v-model="userData.name" type="text" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="name" class="text-red-500" />
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Email</label>
-                        <input disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded">
+                        <Field name="email" disabled v-model="userData.email" type="email" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="email" class="text-red-500" />
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Phone Number</label>
-                        <input v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded">
+                        <Field name="phone_number" v-model="userData.phone_number" type="text" class="w-full mt-2 p-2 border rounded" />
+                        <ErrorMessage name="phone_number" class="text-red-500" />
                     </div>
                     <div class="text-center mt-5 mb-3">
                         <button type="submit"
                             class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
 
@@ -61,49 +64,57 @@
                         PASSWORD</span>
                 </div>
                 <div class="ml-5 mr-5 mt-5">
-                    <div class="mb-4">
-                        <label class="block text-gray-700">old Password</label>
-                        <div class="relative">
-                            <input v-model="passwordChange.old_password" id="password"
-                                :type="show_old_password ? 'text' : 'password'" placeholder="Enter Password Here"
-                                class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                            <button @click="show_old_password = !show_old_password"
-                                class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
-                                <i v-if="show_old_password" class="fa-regular fa-eye-slash"></i>
-                                <i v-else class="fa-regular fa-eye"></i>
-                            </button>
+                    <Form :validation-schema="validationPassword" @submit="handleChangePassword">
+                        <div class="mb-4">
+                            <label class="block text-gray-700">old Password</label>
+                            <div class="relative">
+                                <Field name="old_password" v-model="userData.old_password" id="password"
+                                    :type="show_old_password ? 'text' : 'password'" placeholder="Enter Password Here"
+                                    class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                                <ErrorMessage name="old_password" class="text-red-500" />
+                                <button @click="show_old_password = !show_old_password" type="button"
+                                    class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
+                                    <i v-if="show_old_password" class="fa-regular fa-eye-slash"></i>
+                                    <i v-else class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">New Password</label>
-                        <div class="relative">
-                            <input v-model="passwordChange.new_password" id="password"
-                                :type="show_new_password ? 'text' : 'password'" placeholder="Enter new password here"
-                                class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                            <button @click="show_new_password = !show_new_password"
-                                class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
-                                <i v-if="show_new_password" class="fa-regular fa-eye-slash"></i>
-                                <i v-else class="fa-regular fa-eye"></i>
-                            </button>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700">New Password</label>
+                            <div class="relative">
+                                <Field name="new_password" v-model="userData.new_password" id="password"
+                                    :type="show_new_password ? 'text' : 'password'"
+                                    placeholder="Enter new password here"
+                                    class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                                <ErrorMessage name="new_password" class="text-red-500" />
+                                <button @click="show_new_password = !show_new_password" type="button"
+                                    class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
+                                    <i v-if="show_new_password" class="fa-regular fa-eye-slash"></i>
+                                    <i v-else class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">New Password confirmation</label>
-                        <div class="relative">
-                            <input v-model="passwordChange.new_password_confirmation" id="password"
-                                :type="show_new_password_confirmation ? 'text' : 'password'" placeholder="Enter new password here"
-                                class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                            <button @click="show_new_password_confirmation = !show_new_password_confirmation"
-                                class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
-                                <i v-if="show_new_password_confirmation" class="fa-regular fa-eye-slash"></i>
-                                <i v-else class="fa-regular fa-eye"></i>
-                            </button>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">New Password confirmation</label>
+                            <div class="relative">
+                                <Field name="new_password_confirmation" v-model="userData.new_password_confirmation" id="password"
+                                    :type="show_new_password_confirmation ? 'text' : 'password'"
+                                    placeholder="Enter new password here"
+                                    class="shadow appearance-none border rounded w-full py-3 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                                <ErrorMessage name="new_password_confirmation" class="text-red-500" />
+                                <button @click="show_new_password_confirmation = !show_new_password_confirmation" type="button"
+                                    class="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none">
+                                    <i v-if="show_new_password_confirmation" class="fa-regular fa-eye-slash"></i>
+                                    <i v-else class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="text-center mt-5 mb-3">
-                        <button @click="handleChangePassword"
-                            class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
-                    </div>
+                        <div class="text-center mt-5 mb-3">
+                            <button type="submit"
+                                class=" bg-colers_button-25 text-white px-4 py-2 rounded hover:bg-colers_button-50">Save</button>
+                        </div>
+                    </Form>
                 </div>
             </div>
         </div>
@@ -116,6 +127,8 @@ import { showToast } from '@/utils/toastHelper'
 import { ToastType } from '@/types';
 import { useRoute } from 'vue-router';
 import { reactive, ref, computed, onMounted } from 'vue';
+import { Field, Form, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 
 const currentTab = ref('profile')
 
@@ -133,6 +146,22 @@ const passwordChange = reactive({
     new_password: '',
     new_password_confirmation: '',
 });
+
+const validationProfile = yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    phone_number: yup.string().required().min(9).max(11),
+})
+
+const validationPassword = yup.object({
+    old_password: yup.string().required(),
+    new_password: yup.string().min(8).max(20).required(),
+    new_password_confirmation: yup.string()
+        .oneOf([yup.ref('new_password')], 'Passwords must match')
+        .min(8)
+        .max(20)
+        .required(),
+})
 
 const show_old_password = ref(false);
 const show_new_password = ref(false);
@@ -154,12 +183,12 @@ const handleAvatarChange = (event: Event) => {
     }
 };
 
-const updateUserProfile = async () => {
+const updateUserProfile = async (values) => {
     try {
         const formData = new FormData();
-        formData.append('name', userData.name);
-        formData.append('email', userData.email);
-        formData.append('phone_number', userData.phone_number);
+        formData.append('name', values.name);
+        formData.append('email', values.email);
+        formData.append('phone_number', values.phone_number);
         if (avatarFile.value) {
             formData.append('avatar', avatarFile.value);
         }
@@ -183,12 +212,12 @@ onMounted(async () => {
     }
 });
 
-const handleChangePassword = async () => {
+const handleChangePassword = async (values) => {
     try {
         const formData = new FormData();
-        formData.append('old_password', passwordChange.old_password);
-        formData.append('new_password', passwordChange.new_password);
-        formData.append('new_password_confirmation', passwordChange.new_password_confirmation);
+        formData.append('old_password', values.old_password);
+        formData.append('new_password', values.new_password);
+        formData.append('new_password_confirmation', values.new_password_confirmation);
 
         await changePassword(formData);
         showToast("Password changed successfully", ToastType.SUCCESS);
